@@ -3,7 +3,7 @@ package com.gfa.greenbay.entities;
 import com.gfa.greenbay.enums.Role;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Objects;
+import java.util.Collections;import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,6 +23,7 @@ public class UserEntity implements UserDetails {
   private Long id;
 
   private String username;
+  private String email;
   private String password;
 
   @Enumerated(EnumType.STRING)
@@ -30,9 +31,10 @@ public class UserEntity implements UserDetails {
 
   public UserEntity() {}
 
-  public UserEntity(String username, String password) {
+  public UserEntity(String username, String password, String email) {
     this.username = username;
     this.password = password;
+    this.email = email;
   }
 
   public Long getId() {
@@ -49,6 +51,22 @@ public class UserEntity implements UserDetails {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public Role getRole() {
+    return role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
   }
 
   @Override
@@ -73,7 +91,7 @@ public class UserEntity implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Arrays.asList(new SimpleGrantedAuthority(role.name()));
+    return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
   }
 
   public String getPassword() {
@@ -91,7 +109,9 @@ public class UserEntity implements UserDetails {
     UserEntity that = (UserEntity) o;
     return Objects.equals(id, that.id)
         && Objects.equals(username, that.username)
-        && Objects.equals(password, that.password);
+        && Objects.equals(email, that.email)
+        && Objects.equals(password, that.password)
+        && role == that.role;
   }
 
   @Override
