@@ -1,6 +1,8 @@
 package com.gfa.greenbay.exceptions;
 
 import com.gfa.greenbay.dtos.MessageDto;
+import java.util.Arrays;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,20 +19,18 @@ public class GreenbayExceptionHandler {
     StringBuilder responseMessage = new StringBuilder();
     String exceptionMessage = ex.getMessage();
 
-    if (exceptionMessage.contains("Username can not be empty.")) {
-      responseMessage.append("Username can not be empty. ");
-    }
-    if (exceptionMessage.contains("Email can not be empty.")) {
-      responseMessage.append("Email can not be empty. ");
-    }
-    if (exceptionMessage.contains("Email has bad format.")) {
-      responseMessage.append("Email has bad format. ");
-    }
-    if (exceptionMessage.contains("Password can not be empty.")) {
-      responseMessage.append("Password can not be empty. ");
-    }
-    if (exceptionMessage.contains("Password needs to be at least 8 characters long.")) {
-      responseMessage.append("Password needs to be at least 8 characters long. ");
+    List<String> exceptionMessages =
+        Arrays.asList(
+            "Username can not be empty.",
+            "Email can not be empty.",
+            "Email has bad format.",
+            "Password can not be empty.",
+            "Password needs to be at least 8 characters long.");
+
+    for (String currentMessage : exceptionMessages) {
+      if (exceptionMessage.contains(currentMessage)) {
+        responseMessage.append(currentMessage).append(" ");
+      }
     }
 
     MessageDto response = new MessageDto(responseMessage.toString());
