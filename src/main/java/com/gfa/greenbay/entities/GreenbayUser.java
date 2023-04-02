@@ -1,9 +1,9 @@
 package com.gfa.greenbay.entities;
 
 import com.gfa.greenbay.enums.Role;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;import java.util.Objects;
+import java.util.Collections;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
-public class UserEntity implements UserDetails {
+public class GreenbayUser implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -29,12 +29,13 @@ public class UserEntity implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  public UserEntity() {}
+  public GreenbayUser() {}
 
-  public UserEntity(String username, String password, String email) {
+  public GreenbayUser(String username, String email, String password, Role role) {
     this.username = username;
-    this.password = password;
     this.email = email;
+    this.password = password;
+    this.role = role;
   }
 
   public Long getId() {
@@ -106,7 +107,7 @@ public class UserEntity implements UserDetails {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    UserEntity that = (UserEntity) o;
+    GreenbayUser that = (GreenbayUser) o;
     return Objects.equals(id, that.id)
         && Objects.equals(username, that.username)
         && Objects.equals(email, that.email)
