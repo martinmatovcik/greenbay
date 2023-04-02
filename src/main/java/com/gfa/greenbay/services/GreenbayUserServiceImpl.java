@@ -8,7 +8,8 @@ import com.gfa.greenbay.enums.Role;
 import com.gfa.greenbay.repositories.GreenbayUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.BadCredentialsException;import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,9 +50,13 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
 
   @Override
   public AuthenticationResponseDto login(LoginRequestDto requestDto) {
-    authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-            requestDto.getUsername(), requestDto.getPassword()));
+    try {
+      authenticationManager.authenticate(
+          new UsernamePasswordAuthenticationToken(
+              requestDto.getUsername(), requestDto.getPassword()));
+    } catch (AuthenticationException e) {
+      throw new BadCredentialsException("Username or password is not correct!");
+    }
 
     GreenbayUser user =
         userRepository
