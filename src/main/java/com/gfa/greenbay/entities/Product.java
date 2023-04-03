@@ -26,6 +26,7 @@ public class Product {
   private Integer startingPrice;
   private Integer purchasePrice;
   private Boolean deleted = false;
+  private Integer lastBid = 0;
 
   public Product() {
   }
@@ -107,6 +108,14 @@ public class Product {
     this.deleted = true;
   }
 
+  public Integer getLastBid() {
+    return lastBid;
+  }
+
+  public void setLastBid(Integer lastBid) {
+    this.lastBid = lastBid;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -116,11 +125,15 @@ public class Product {
       return false;
     }
     Product product = (Product) o;
-    return Objects.equals(id, product.id) && Objects.equals(name, product.name)
-        && Objects.equals(description, product.description) && Objects.equals(
-        photoUrl, product.photoUrl) && Objects.equals(startingPrice, product.startingPrice)
-        && Objects.equals(purchasePrice, product.purchasePrice) && Objects.equals(
-        deleted, product.deleted);
+    return
+        Objects.equals(id, product.id)
+            && Objects.equals(name, product.name)
+            && Objects.equals(description, product.description)
+            && Objects.equals(photoUrl, product.photoUrl)
+            && Objects.equals(startingPrice, product.startingPrice)
+            && Objects.equals(purchasePrice, product.purchasePrice)
+            && Objects.equals(deleted, product.deleted)
+            && Objects.equals(lastBid, product.lastBid);
   }
 
   @Override
