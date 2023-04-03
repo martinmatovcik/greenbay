@@ -7,9 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "products")
+@SQLDelete(sql = "UPDATE products SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 public class Product {
 
   @Id
@@ -21,7 +25,7 @@ public class Product {
   private String photoUrl;
   private Integer startingPrice;
   private Integer purchasePrice;
-  private Boolean deleted;
+  private Boolean deleted = false;
 
   public Product() {
   }
@@ -37,7 +41,6 @@ public class Product {
     this.photoUrl = photoUrl;
     this.startingPrice = startingPrice;
     this.purchasePrice = purchasePrice;
-    this.deleted = false;
   }
 
   public Product(ProductDto productDto) {
