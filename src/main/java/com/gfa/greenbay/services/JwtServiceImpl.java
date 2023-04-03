@@ -1,7 +1,6 @@
 package com.gfa.greenbay.services;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -12,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +19,8 @@ public class JwtServiceImpl implements JwtService {
 
   private final String SECRET_KEY;
 
-  private final JwtParser jwtParser;
-
-
-  public JwtServiceImpl(@Value("${JWT_SECRET_KEY}") String SECRET_KEY,
-      JwtParser jwtParser) {
+  public JwtServiceImpl(@Value("${JWT_SECRET_KEY}") String SECRET_KEY) {
     this.SECRET_KEY = SECRET_KEY;
-    this.jwtParser = jwtParser;
   }
 
   @Override
@@ -79,7 +72,9 @@ public class JwtServiceImpl implements JwtService {
   private Claims extractAllClaims(
       String token) {
     return
-        jwtParser
+        Jwts.parserBuilder()
+            .setSigningKey(getSigningKey())
+            .build()
             .parseClaimsJws(token)
             .getBody();
   }
@@ -89,10 +84,10 @@ public class JwtServiceImpl implements JwtService {
     return Keys.hmacShaKeyFor(keyBytes);
   }
 
-  @Bean
-  public JwtParser jwtParserBuilder() {
-    return Jwts.parserBuilder()
-        .setSigningKey(getSigningKey())
-        .build();
-  }
+//  @Bean
+//  public JwtParser jwtParserBuilder() {
+//    return Jwts.parserBuilder()
+//        .setSigningKey(getSigningKey())
+//        .build();
+//  }
 }
