@@ -2,12 +2,12 @@ package com.gfa.greenbay.dtos;
 
 import java.util.Objects;
 
-public class AuthenticationResponseDto {
+public class UserAuthenticationResponseDto {
   private String token;
 
-  public AuthenticationResponseDto() {}
+  public UserAuthenticationResponseDto() {}
 
-  public AuthenticationResponseDto(String token) {
+  public UserAuthenticationResponseDto(String token) {
     this.token = token;
   }
 
@@ -23,7 +23,7 @@ public class AuthenticationResponseDto {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    AuthenticationResponseDto that = (AuthenticationResponseDto) o;
+    UserAuthenticationResponseDto that = (UserAuthenticationResponseDto) o;
     return Objects.equals(token, that.token);
   }
 

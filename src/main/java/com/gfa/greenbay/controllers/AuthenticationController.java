@@ -1,8 +1,8 @@
 package com.gfa.greenbay.controllers;
 
-import com.gfa.greenbay.dtos.AuthenticationResponseDto;
-import com.gfa.greenbay.dtos.LoginRequestDto;
-import com.gfa.greenbay.dtos.RegisterRequestDto;
+import com.gfa.greenbay.dtos.UserAuthenticationResponseDto;
+import com.gfa.greenbay.dtos.UserLoginRequestDto;
+import com.gfa.greenbay.dtos.UserRegisterRequestDto;
 import com.gfa.greenbay.services.GreenbayUserService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +23,14 @@ public class AuthenticationController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<AuthenticationResponseDto> register(
-      @Valid @RequestBody RegisterRequestDto requestDto) {
+  public ResponseEntity<UserAuthenticationResponseDto> register(
+      @Valid @RequestBody UserRegisterRequestDto requestDto) {
     return ResponseEntity.ok(userService.register(requestDto));
   }
 
   @PostMapping("/login")
-  public ResponseEntity<AuthenticationResponseDto> login(
-      @Valid @RequestBody LoginRequestDto requestDto) {
+  public ResponseEntity<UserAuthenticationResponseDto> login(
+      @Valid @RequestBody UserLoginRequestDto requestDto) {
     return ResponseEntity.ok(userService.login(requestDto));
   }
 }

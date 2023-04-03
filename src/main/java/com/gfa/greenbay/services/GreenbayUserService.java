@@ -1,11 +1,11 @@
 package com.gfa.greenbay.services;
 
-import com.gfa.greenbay.dtos.AuthenticationResponseDto;
-import com.gfa.greenbay.dtos.LoginRequestDto;
-import com.gfa.greenbay.dtos.RegisterRequestDto;
+import com.gfa.greenbay.dtos.UserAuthenticationResponseDto;
+import com.gfa.greenbay.dtos.UserLoginRequestDto;
+import com.gfa.greenbay.dtos.UserRegisterRequestDto;
 
 public interface GreenbayUserService {
-  AuthenticationResponseDto register(RegisterRequestDto requestDto);
+  UserAuthenticationResponseDto register(UserRegisterRequestDto requestDto);
 
-  AuthenticationResponseDto login(LoginRequestDto requestDto);
+  UserAuthenticationResponseDto login(UserLoginRequestDto requestDto);
 }
