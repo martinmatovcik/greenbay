@@ -6,6 +6,7 @@ import java.util.function.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface JwtService {
+
   String extractUsername(String token);
 
   <T> T extractClaim(String token, Function<Claims, T> claimsResolver);
@@ -14,5 +15,5 @@ public interface JwtService {
 
   String generateToken(UserDetails userDetails);
 
-  Boolean isTokenValid(String token, UserDetails userDetails);
+  Boolean isTokenValidForUsername(String token, UserDetails userDetails);
 }

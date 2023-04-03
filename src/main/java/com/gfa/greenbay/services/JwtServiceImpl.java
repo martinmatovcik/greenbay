@@ -1,6 +1,7 @@
 package com.gfa.greenbay.services;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -11,16 +12,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JwtServiceImpl implements JwtService {
-  // if it has to be STATIC use dotenv.get()https://github.com/paulschwarz/spring-dotenv
+
   private final String SECRET_KEY;
 
-  public JwtServiceImpl(@Value("${JWT_SECRET_KEY}") String SECRET_KEY) {  //FIXME where is it set?
+  private final JwtParser jwtParser;
+
+
+  public JwtServiceImpl(@Value("${JWT_SECRET_KEY}") String SECRET_KEY,
+      JwtParser jwtParser) {
     this.SECRET_KEY = SECRET_KEY;
+    this.jwtParser = jwtParser;
   }
 
   @Override
@@ -42,7 +49,8 @@ public class JwtServiceImpl implements JwtService {
         .setClaims(extraClaims)
         .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis()))  //FIXME use .addDays(1) -> java.util.Date does not support it
+        .setExpiration(new Date(
+            System.currentTimeMillis()))
         .signWith(getSigningKey(), SignatureAlgorithm.HS256)
         .compact();
   }
@@ -53,7 +61,8 @@ public class JwtServiceImpl implements JwtService {
   }
 
   @Override
-  public Boolean isTokenValid(String token, UserDetails userDetails) {  //FIXME isTokenValid should not require UserDetails, either rename function or remove
+  public Boolean isTokenValidForUsername(String token,
+      UserDetails userDetails) {
     final String username = extractUsername(token);
     return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
   }
@@ -62,20 +71,28 @@ public class JwtServiceImpl implements JwtService {
     return extractExpiration(token).before(new Date());
   }
 
-  private Date extractExpiration(String token) {  //FIXME avoid using java.util.Date -> use java.time...
+  private Date extractExpiration(
+      String token) {
     return extractClaim(token, Claims::getExpiration);
   }
 
-  private Claims extractAllClaims(String token) {
-    return Jwts.parserBuilder()
-        .setSigningKey(getSigningKey())
-        .build() //FIXME extract builder to local variable so dont have to build it all the time
-        .parseClaimsJws(token)
-        .getBody();
+  private Claims extractAllClaims(
+      String token) {
+    return
+        jwtParser
+            .parseClaimsJws(token)
+            .getBody();
   }
 
   private Key getSigningKey() {
     byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
     return Keys.hmacShaKeyFor(keyBytes);
+  }
+
+  @Bean
+  public JwtParser jwtParserBuilder() {
+    return Jwts.parserBuilder()
+        .setSigningKey(getSigningKey())
+        .build();
   }
 }
