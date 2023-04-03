@@ -12,8 +12,8 @@ import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "products")
-@SQLDelete(sql = "UPDATE products SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
+@SQLDelete(sql = "UPDATE products SET sold = true WHERE id=?")
+@Where(clause = "sold=false")
 public class Product {
 
   @Id
@@ -25,7 +25,7 @@ public class Product {
   private String photoUrl;
   private Integer startingPrice;
   private Integer purchasePrice;
-  private Boolean deleted = false;
+  private Boolean sold = false;
   private Integer lastBid = 0;
 
   public Product() {
@@ -100,12 +100,12 @@ public class Product {
     this.purchasePrice = purchasePrice;
   }
 
-  public Boolean getDeleted() {
-    return deleted;
+  public Boolean isSold() {
+    return sold;
   }
 
-  public void setDeleted() {
-    this.deleted = true;
+  public void setSold() {
+    this.sold = true;
   }
 
   public Integer getLastBid() {
@@ -132,7 +132,7 @@ public class Product {
             && Objects.equals(photoUrl, product.photoUrl)
             && Objects.equals(startingPrice, product.startingPrice)
             && Objects.equals(purchasePrice, product.purchasePrice)
-            && Objects.equals(deleted, product.deleted)
+            && Objects.equals(sold, product.sold)
             && Objects.equals(lastBid, product.lastBid);
   }
 
