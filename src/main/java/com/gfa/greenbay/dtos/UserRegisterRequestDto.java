@@ -10,7 +10,7 @@ public class UserRegisterRequestDto {
   private String username;
 
   @NotBlank(message = "Email can not be empty.")
-  @Email(message = "Email has bad format.")
+  @Email(message = "Email has invalid format.")
   private String email;
 
   @NotBlank(message = "Password can not be empty.")

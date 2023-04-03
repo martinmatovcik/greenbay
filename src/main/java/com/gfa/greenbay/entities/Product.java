@@ -1,6 +1,5 @@
 package com.gfa.greenbay.entities;
 
-import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -18,10 +17,10 @@ public class Product {
 
   private String name;
   private String description;
-  private URL photoUrl;
-  private BigDecimal startingPrice;
-  private BigDecimal purchasePrice;
-  private BigDecimal latestBid;
+  private URL photoUrl;  //FIXME will it work with DB?
+  private Integer startingPrice;
+  private Integer purchasePrice;
+  private Integer latestBid;
 
   public Product() {}
 
@@ -30,9 +29,9 @@ public class Product {
       String name,
       String description,
       URL photoUrl,
-      BigDecimal startingPrice,
-      BigDecimal purchasePrice,
-      BigDecimal latestBid) {
+      Integer startingPrice,
+      Integer purchasePrice,
+      Integer latestBid) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -74,27 +73,27 @@ public class Product {
     this.photoUrl = photoUrl;
   }
 
-  public BigDecimal getStartingPrice() {
+  public Integer getStartingPrice() {
     return startingPrice;
   }
 
-  public void setStartingPrice(BigDecimal startingPrice) {
+  public void setStartingPrice(Integer startingPrice) {
     this.startingPrice = startingPrice;
   }
 
-  public BigDecimal getPurchasePrice() {
+  public Integer getPurchasePrice() {
     return purchasePrice;
   }
 
-  public void setPurchasePrice(BigDecimal purchasePrice) {
+  public void setPurchasePrice(Integer purchasePrice) {
     this.purchasePrice = purchasePrice;
   }
 
-  public BigDecimal getLatestBid() {
+  public Integer getLatestBid() {
     return latestBid;
   }
 
-  public void setLatestBid(BigDecimal latestBid) {
+  public void setLatestBid(Integer latestBid) {
     this.latestBid = latestBid;
   }
 

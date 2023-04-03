@@ -1,6 +1,6 @@
 package com.gfa.greenbay.controllers;
 
-import com.gfa.greenbay.dtos.UserAuthenticationResponseDto;
+import com.gfa.greenbay.dtos.TokenResponseDto;
 import com.gfa.greenbay.dtos.UserLoginRequestDto;
 import com.gfa.greenbay.dtos.UserRegisterRequestDto;
 import com.gfa.greenbay.services.GreenbayUserService;
@@ -23,13 +23,13 @@ public class AuthenticationController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<UserAuthenticationResponseDto> register(
+  public ResponseEntity<TokenResponseDto> register(
       @Valid @RequestBody UserRegisterRequestDto requestDto) {
     return ResponseEntity.ok(userService.register(requestDto));
   }
 
   @PostMapping("/login")
-  public ResponseEntity<UserAuthenticationResponseDto> login(
+  public ResponseEntity<TokenResponseDto> login(
       @Valid @RequestBody UserLoginRequestDto requestDto) {
     return ResponseEntity.ok(userService.login(requestDto));
   }
