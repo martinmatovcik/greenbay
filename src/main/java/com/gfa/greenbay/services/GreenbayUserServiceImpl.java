@@ -1,8 +1,8 @@
 package com.gfa.greenbay.services;
 
-import com.gfa.greenbay.dtos.AuthenticationResponseDto;
-import com.gfa.greenbay.dtos.LoginRequestDto;
-import com.gfa.greenbay.dtos.RegisterRequestDto;
+import com.gfa.greenbay.dtos.TokenResponseDto;
+import com.gfa.greenbay.dtos.UserLoginRequestDto;
+import com.gfa.greenbay.dtos.UserRegisterRequestDto;
 import com.gfa.greenbay.entities.GreenbayUser;
 import com.gfa.greenbay.enums.Role;
 import com.gfa.greenbay.repositories.GreenbayUserRepository;
@@ -39,7 +39,7 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
   }
 
   @Override
-  public AuthenticationResponseDto register(RegisterRequestDto requestDto) {
+  public TokenResponseDto register(UserRegisterRequestDto requestDto) {
     GreenbayUser user =
         new GreenbayUser(
             requestDto.getUsername(),
@@ -49,11 +49,11 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
     userRepository.save(user);
 
     String jwtToken = jwtService.generateToken(user);
-    return new AuthenticationResponseDto(jwtToken);
+    return new TokenResponseDto(jwtToken);
   }
 
   @Override
-  public AuthenticationResponseDto login(LoginRequestDto requestDto) {
+  public TokenResponseDto login(UserLoginRequestDto requestDto) {
 
     try {
       authenticationManager.authenticate(
@@ -65,6 +65,6 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
 
     GreenbayUser user = (GreenbayUser) userDetailsService.loadUserByUsername(requestDto.getUsername());
     String jwtToken = jwtService.generateToken(user);
-    return new AuthenticationResponseDto(jwtToken);
+    return new TokenResponseDto(jwtToken);
   }
 }

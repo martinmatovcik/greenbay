@@ -19,7 +19,7 @@ public class JwtServiceImpl implements JwtService {
   // if it has to be STATIC use dotenv.get()https://github.com/paulschwarz/spring-dotenv
   private final String SECRET_KEY;
 
-  public JwtServiceImpl(@Value("${JWT_SECRET_KEY}") String SECRET_KEY) {
+  public JwtServiceImpl(@Value("${JWT_SECRET_KEY}") String SECRET_KEY) {  //FIXME where is it set?
     this.SECRET_KEY = SECRET_KEY;
   }
 
@@ -35,12 +35,12 @@ public class JwtServiceImpl implements JwtService {
   }
 
   @Override
-  public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+  public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) { //FIXME switch param order, if extra then at the end
     return Jwts.builder()
         .setClaims(extraClaims)
         .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))  //FIXME use .addDays(1)
         .signWith(getSigningKey(), SignatureAlgorithm.HS256)
         .compact();
   }
@@ -51,7 +51,7 @@ public class JwtServiceImpl implements JwtService {
   }
 
   @Override
-  public Boolean isTokenValid(String token, UserDetails userDetails) {
+  public Boolean isTokenValid(String token, UserDetails userDetails) {  //FIXME isTokenValid should not require UserDetails, either rename function or remove
     final String username = extractUsername(token);
     return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
   }
@@ -60,14 +60,14 @@ public class JwtServiceImpl implements JwtService {
     return extractExpiration(token).before(new Date());
   }
 
-  private Date extractExpiration(String token) {
+  private Date extractExpiration(String token) {  //FIXME avoid using java.util.Date -> use java.time...
     return extractClaim(token, Claims::getExpiration);
   }
 
   private Claims extractAllClaims(String token) {
     return Jwts.parserBuilder()
         .setSigningKey(getSigningKey())
-        .build()
+        .build() //FIXME extract builder to local variable so dont have to build it all the time
         .parseClaimsJws(token)
         .getBody();
   }

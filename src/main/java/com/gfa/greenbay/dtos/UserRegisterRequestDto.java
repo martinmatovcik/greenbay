@@ -5,21 +5,21 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-public class RegisterRequestDto {
+public class UserRegisterRequestDto {
   @NotBlank(message = "Username can not be empty.")
   private String username;
 
   @NotBlank(message = "Email can not be empty.")
-  @Email(message = "Email has bad format.")
+  @Email(message = "Email has invalid format.")
   private String email;
 
   @NotBlank(message = "Password can not be empty.")
   @Pattern(message = "Password needs to be at least 8 characters long.", regexp = "^.{8,}$")
   private String password;
 
-  public RegisterRequestDto() {}
+  public UserRegisterRequestDto() {}
 
-  public RegisterRequestDto(String username, String email, String password) {
+  public UserRegisterRequestDto(String username, String email, String password) {
     this.username = username;
     this.email = email;
     this.password = password;
@@ -53,7 +53,7 @@ public class RegisterRequestDto {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    RegisterRequestDto that = (RegisterRequestDto) o;
+    UserRegisterRequestDto that = (UserRegisterRequestDto) o;
     return Objects.equals(username, that.username)
         && Objects.equals(email, that.email)
         && Objects.equals(password, that.password);

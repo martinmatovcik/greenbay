@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class GeneralConfiguration {
+public class GeneralConfiguration { //FIXME either move to security config or rename to specific
 
   private final GreenbayUserRepository userRepository;
 
@@ -28,7 +28,7 @@ public class GeneralConfiguration {
     return username ->
         userRepository
             .findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+            .orElseThrow(() -> new UsernameNotFoundException("User not found."));  //FIXME check if this can be used by hacker to find out who is registered
   }
 
   @Bean

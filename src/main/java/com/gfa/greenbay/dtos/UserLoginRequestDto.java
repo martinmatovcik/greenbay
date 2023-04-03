@@ -3,16 +3,16 @@ package com.gfa.greenbay.dtos;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 
-public class LoginRequestDto {
+public class UserLoginRequestDto {
   @NotNull(message = "Username can not be empty.")
   private String username;
 
   @NotNull(message = "Password can not be empty.")
   private String password;
 
-  public LoginRequestDto() {}
+  public UserLoginRequestDto() {}
 
-  public LoginRequestDto(String username, String password) {
+  public UserLoginRequestDto(String username, String password) {
     this.username = username;
     this.password = password;
   }
@@ -37,7 +37,7 @@ public class LoginRequestDto {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    LoginRequestDto that = (LoginRequestDto) o;
+    UserLoginRequestDto that = (UserLoginRequestDto) o;
     return Objects.equals(username, that.username) && Objects.equals(password, that.password);
   }
 
