@@ -11,17 +11,20 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "products")
 public class Product {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String name;
   private String description;
-  private String photoUrl;  //FIXME will it work with DB?
+  private String photoUrl;
   private Integer startingPrice;
   private Integer purchasePrice;
+  private Boolean deleted;
 
-  public Product() {}
+  public Product() {
+  }
 
   public Product(
       String name,
@@ -34,6 +37,7 @@ public class Product {
     this.photoUrl = photoUrl;
     this.startingPrice = startingPrice;
     this.purchasePrice = purchasePrice;
+    this.deleted = false;
   }
 
   public Product(ProductDto productDto) {
@@ -92,17 +96,28 @@ public class Product {
     this.purchasePrice = purchasePrice;
   }
 
+  public Boolean getDeleted() {
+    return deleted;
+  }
+
+  public void setDeleted() {
+    this.deleted = true;
+  }
+
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     Product product = (Product) o;
-    return Objects.equals(id, product.id)
-        && Objects.equals(name, product.name)
-        && Objects.equals(description, product.description)
-        && Objects.equals(photoUrl, product.photoUrl)
-        && Objects.equals(startingPrice, product.startingPrice)
-        && Objects.equals(purchasePrice, product.purchasePrice);
+    return Objects.equals(id, product.id) && Objects.equals(name, product.name)
+        && Objects.equals(description, product.description) && Objects.equals(
+        photoUrl, product.photoUrl) && Objects.equals(startingPrice, product.startingPrice)
+        && Objects.equals(purchasePrice, product.purchasePrice) && Objects.equals(
+        deleted, product.deleted);
   }
 
   @Override

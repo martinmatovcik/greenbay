@@ -4,7 +4,7 @@ import com.gfa.greenbay.dtos.TokenResponseDto;
 import com.gfa.greenbay.dtos.UserLoginRequestDto;
 import com.gfa.greenbay.dtos.UserRegisterRequestDto;
 import com.gfa.greenbay.entities.GreenbayUser;
-import com.gfa.greenbay.enums.Role;
+import com.gfa.greenbay.entities.enums.Role;
 import com.gfa.greenbay.repositories.GreenbayUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -63,7 +63,8 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
       throw new BadCredentialsException("Username or password is not correct!");
     }
 
-    GreenbayUser user = (GreenbayUser) userDetailsService.loadUserByUsername(requestDto.getUsername());
+    GreenbayUser user = (GreenbayUser) userDetailsService.loadUserByUsername(
+        requestDto.getUsername());
     String jwtToken = jwtService.generateToken(user);
     return new TokenResponseDto(jwtToken);
   }
