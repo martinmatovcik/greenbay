@@ -35,19 +35,21 @@ public class JwtServiceImpl implements JwtService {
   }
 
   @Override
-  public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) { //FIXME switch param order, if extra then at the end
+  public String generateToken(
+      UserDetails userDetails,
+      Map<String, Object> extraClaims) {
     return Jwts.builder()
         .setClaims(extraClaims)
         .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))  //FIXME use .addDays(1)
+        .setExpiration(new Date(System.currentTimeMillis()))  //FIXME use .addDays(1) -> java.util.Date does not support it
         .signWith(getSigningKey(), SignatureAlgorithm.HS256)
         .compact();
   }
 
   @Override
   public String generateToken(UserDetails userDetails) {
-    return generateToken(new HashMap<>(), userDetails);
+    return generateToken(userDetails, new HashMap<>());
   }
 
   @Override
