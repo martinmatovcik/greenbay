@@ -1,8 +1,13 @@
 package com.gfa.greenbay.services;
 
+import com.gfa.greenbay.dtos.ProductCreateResponseDto;
 import com.gfa.greenbay.dtos.ProductDto;
-import com.gfa.greenbay.dtos.ProductResponseDto;
+import com.gfa.greenbay.dtos.ProductListResponseDto;
+import java.util.List;
 
 public interface ProductService {
-  ProductResponseDto createProduct(ProductDto productDto);
+
+  ProductCreateResponseDto createProduct(ProductDto productDto);
+
+  List<ProductListResponseDto> listProducts(Integer pageNumber);
 }
