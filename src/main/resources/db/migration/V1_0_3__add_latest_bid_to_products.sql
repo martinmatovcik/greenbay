@@ -1,2 +1,2 @@
 ALTER TABLE 'products'
-    ADD COLUMN 'latest_bid' INT NOT NULL DEFAULT 0;
+    ADD COLUMN 'last_bid' INT NOT NULL DEFAULT 0;
