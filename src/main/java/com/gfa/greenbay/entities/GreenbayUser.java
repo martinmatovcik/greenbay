@@ -1,7 +1,6 @@
 package com.gfa.greenbay.entities;
 
-import com.gfa.greenbay.enums.Role;
-import java.math.BigDecimal;
+import com.gfa.greenbay.entities.enums.Role;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -20,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @Table(name = "users")
 public class GreenbayUser implements UserDetails {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -33,16 +33,17 @@ public class GreenbayUser implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  private BigDecimal balance;
+  private Integer balance;
 
-  public GreenbayUser() {}
+  public GreenbayUser() {
+  }
 
   public GreenbayUser(String username, String email, String password, Role role) {
     this.username = username;
     this.email = email;
     this.password = password;
     this.role = role;
-    this.balance = BigDecimal.valueOf(0);
+    this.balance = 0;
   }
 
   public Long getId() {
@@ -110,18 +111,22 @@ public class GreenbayUser implements UserDetails {
     this.password = password;
   }
 
-  public BigDecimal getBalance() {
+  public Integer getBalance() {
     return balance;
   }
 
-  public void setBalance(BigDecimal balance) {
+  public void setBalance(Integer balance) {
     this.balance = balance;
   }
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     GreenbayUser user = (GreenbayUser) o;
     return Objects.equals(id, user.id)
         && Objects.equals(username, user.username)
