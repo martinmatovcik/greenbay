@@ -8,9 +8,10 @@ import com.gfa.greenbay.enums.Role;
 import com.gfa.greenbay.repositories.GreenbayUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +22,20 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
+  private final UserDetailsService userDetailsService;
 
   @Autowired
   public GreenbayUserServiceImpl(
       GreenbayUserRepository userRepository,
       PasswordEncoder passwordEncoder,
       JwtService jwtService,
-      AuthenticationManager authenticationManager) {
+      AuthenticationManager authenticationManager,
+      UserDetailsService userDetailsService) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
     this.jwtService = jwtService;
     this.authenticationManager = authenticationManager;
+    this.userDetailsService = userDetailsService;
   }
 
   @Override
@@ -50,6 +54,7 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
 
   @Override
   public AuthenticationResponseDto login(LoginRequestDto requestDto) {
+
     try {
       authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
@@ -58,11 +63,7 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
       throw new BadCredentialsException("Username or password is not correct!");
     }
 
-    GreenbayUser user =
-        userRepository
-            .findByUsername(requestDto.getUsername())
-            .orElseThrow(() -> new UsernameNotFoundException("User not found."));
-
+    GreenbayUser user = (GreenbayUser) userDetailsService.loadUserByUsername(requestDto.getUsername());
     String jwtToken = jwtService.generateToken(user);
     return new AuthenticationResponseDto(jwtToken);
   }
