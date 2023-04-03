@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GreenbayExceptionHandler {
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorDto> handleAuthValidationException(
       MethodArgumentNotValidException ex) {
@@ -24,7 +25,7 @@ public class GreenbayExceptionHandler {
     List<String> errorDetails = new ArrayList<>();
 
     for (FieldError error : errors) {
-        errorDetails.add(error.getDefaultMessage());
+      errorDetails.add(error.getDefaultMessage());
     }
 
     return new ResponseEntity<>(
@@ -35,16 +36,28 @@ public class GreenbayExceptionHandler {
   @ExceptionHandler(BadCredentialsException.class)
   public ResponseEntity<ErrorDto> handleBadCredentialsException(BadCredentialsException ex) {
     return new ResponseEntity<>(
-        new ErrorDto(403, Collections.singletonList(ex.getMessage())), HttpStatus.FORBIDDEN);
+        new ErrorDto(403, Collections.singletonList(ex.getMessage())),
+        HttpStatus.FORBIDDEN);
   }
 
   @ExceptionHandler(DataIntegrityViolationException.class)
   public ResponseEntity<ErrorDto> handleNotUniqueUsername(DataIntegrityViolationException ex) {
-    return new ResponseEntity<>(new ErrorDto(400, Collections.singletonList("Username is taken!")), HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(
+        new ErrorDto(400, Collections.singletonList("Username is taken!")),
+        HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<ErrorDto> handleMissingRequestBody(HttpMessageNotReadableException ex) {
-    return new ResponseEntity<>(new ErrorDto(400, Collections.singletonList(ex.getMessage())), HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(
+        new ErrorDto(400, Collections.singletonList(ex.getMessage())),
+        HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ErrorDto> handleIllegalArgument(IllegalArgumentException ex) {
+    return new ResponseEntity<>(
+        new ErrorDto(400, Collections.singletonList(ex.getMessage())),
+        HttpStatus.BAD_REQUEST);
   }
 }

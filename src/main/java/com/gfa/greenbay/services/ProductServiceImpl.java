@@ -29,10 +29,6 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   public List<ProductListResponseDto> listProducts(Integer pageNumber) {
-    if (pageNumber < 0) {
-      //TODO -- exception + handling
-    }
-
     Pageable pageable = PageRequest.of(pageNumber, 20);
     Page<Product> productPage = productRepository.findAllByDeleted(false, pageable);
 
