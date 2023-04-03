@@ -3,8 +3,9 @@ package com.gfa.greenbay.dtos;
 import java.util.Objects;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-public class ProductCreateRequestDto {
+public class ProductDto {
   @NotBlank(message = "Name can not be empty.")
   private String name;
 
@@ -15,17 +16,17 @@ public class ProductCreateRequestDto {
   @org.hibernate.validator.constraints.URL(message = "Please provide valid URL")
   private String photoUrl;
 
-  @NotBlank(message = "Starting price can not be empty.")
-  @Min(value = 0)
+  @NotNull(message = "Starting price can not be empty.")
+  @Min(value = 0, message = "Starting price needs to be positive integer.")
   private Integer startingPrice;
 
-  @NotBlank(message = "Purchase price can not be empty.")
-  @Min(value = 0)
+  @NotNull(message = "Purchase price can not be empty.")
+  @Min(value = 0, message = "Starting price needs to be positive integer.")
   private Integer purchasePrice;
 
-  public ProductCreateRequestDto() {}
+  public ProductDto() {}
 
-  public ProductCreateRequestDto(
+  public ProductDto(
       String name,
       String description,
       String photoUrl,
@@ -82,7 +83,7 @@ public class ProductCreateRequestDto {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    ProductCreateRequestDto that = (ProductCreateRequestDto) o;
+    ProductDto that = (ProductDto) o;
     return Objects.equals(name, that.name)
         && Objects.equals(description, that.description)
         && Objects.equals(photoUrl, that.photoUrl)
