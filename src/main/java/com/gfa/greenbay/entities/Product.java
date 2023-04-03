@@ -1,6 +1,6 @@
 package com.gfa.greenbay.entities;
 
-import java.net.URL;
+import com.gfa.greenbay.dtos.ProductDto;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,28 +17,31 @@ public class Product {
 
   private String name;
   private String description;
-  private URL photoUrl;  //FIXME will it work with DB?
+  private String photoUrl;  //FIXME will it work with DB?
   private Integer startingPrice;
   private Integer purchasePrice;
-  private Integer latestBid;
 
   public Product() {}
 
   public Product(
-      Long id,
       String name,
       String description,
-      URL photoUrl,
+      String photoUrl,
       Integer startingPrice,
-      Integer purchasePrice,
-      Integer latestBid) {
-    this.id = id;
+      Integer purchasePrice) {
     this.name = name;
     this.description = description;
     this.photoUrl = photoUrl;
     this.startingPrice = startingPrice;
     this.purchasePrice = purchasePrice;
-    this.latestBid = latestBid;
+  }
+
+  public Product(ProductDto productDto) {
+    this.name = productDto.getName();
+    this.description = productDto.getDescription();
+    this.photoUrl = productDto.getPhotoUrl();
+    this.startingPrice = productDto.getStartingPrice();
+    this.purchasePrice = productDto.getPurchasePrice();
   }
 
   public Long getId() {
@@ -65,11 +68,11 @@ public class Product {
     this.description = description;
   }
 
-  public URL getPhotoUrl() {
+  public String getPhotoUrl() {
     return photoUrl;
   }
 
-  public void setPhotoUrl(URL photoUrl) {
+  public void setPhotoUrl(String photoUrl) {
     this.photoUrl = photoUrl;
   }
 
@@ -89,14 +92,6 @@ public class Product {
     this.purchasePrice = purchasePrice;
   }
 
-  public Integer getLatestBid() {
-    return latestBid;
-  }
-
-  public void setLatestBid(Integer latestBid) {
-    this.latestBid = latestBid;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -107,8 +102,7 @@ public class Product {
         && Objects.equals(description, product.description)
         && Objects.equals(photoUrl, product.photoUrl)
         && Objects.equals(startingPrice, product.startingPrice)
-        && Objects.equals(purchasePrice, product.purchasePrice)
-        && Objects.equals(latestBid, product.latestBid);
+        && Objects.equals(purchasePrice, product.purchasePrice);
   }
 
   @Override
