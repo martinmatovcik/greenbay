@@ -1,11 +1,17 @@
 package com.gfa.greenbay.entities;
 
 import com.gfa.greenbay.dtos.ProductDto;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -27,6 +33,12 @@ public class Product {
   private Integer purchasePrice;
   private Boolean sold = false;
   private Integer lastBid = 0;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private GreenbayUser user;
+
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+  private List<Bid> bids;
 
   public Product() {
   }
@@ -44,12 +56,13 @@ public class Product {
     this.purchasePrice = purchasePrice;
   }
 
-  public Product(ProductDto productDto) {
+  public Product(ProductDto productDto, GreenbayUser user) {
     this.name = productDto.getName();
     this.description = productDto.getDescription();
     this.photoUrl = productDto.getPhotoUrl();
     this.startingPrice = productDto.getStartingPrice();
     this.purchasePrice = productDto.getPurchasePrice();
+    this.user = user;
   }
 
   public Long getId() {
@@ -116,6 +129,14 @@ public class Product {
     this.lastBid = lastBid;
   }
 
+  public GreenbayUser getUser() {
+    return user;
+  }
+
+  public void setUser(GreenbayUser user) {
+    this.user = user;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -125,15 +146,12 @@ public class Product {
       return false;
     }
     Product product = (Product) o;
-    return
-        Objects.equals(id, product.id)
-            && Objects.equals(name, product.name)
-            && Objects.equals(description, product.description)
-            && Objects.equals(photoUrl, product.photoUrl)
-            && Objects.equals(startingPrice, product.startingPrice)
-            && Objects.equals(purchasePrice, product.purchasePrice)
-            && Objects.equals(sold, product.sold)
-            && Objects.equals(lastBid, product.lastBid);
+    return Objects.equals(id, product.id) && Objects.equals(name, product.name)
+        && Objects.equals(description, product.description) && Objects.equals(
+        photoUrl, product.photoUrl) && Objects.equals(startingPrice, product.startingPrice)
+        && Objects.equals(purchasePrice, product.purchasePrice) && Objects.equals(
+        sold, product.sold) && Objects.equals(lastBid, product.lastBid)
+        && Objects.equals(user, product.user);
   }
 
   @Override
