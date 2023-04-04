@@ -1,8 +1,8 @@
 package com.gfa.greenbay.entities;
 
-import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.Objects;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "bids")

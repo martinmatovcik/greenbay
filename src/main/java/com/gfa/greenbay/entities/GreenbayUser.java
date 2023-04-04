@@ -1,15 +1,14 @@
 package com.gfa.greenbay.entities;
 
 import com.gfa.greenbay.entities.enums.Role;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
@@ -108,41 +107,49 @@ public class GreenbayUser implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
-    }
+  }
 
-    public Integer getBalance() {
-        return balance;
-    }
+  public Integer getBalance() {
+    return balance;
+  }
 
-    public List<Product> getProducts() {
-        return products;
-    }
+  public void setBalance(Integer balance) {
+    this.balance = balance;
+  }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+  public List<Product> getProducts() {
+    return products;
+  }
 
-    public void setBalance(Integer balance) {
-        this.balance = balance;
-    }
+  public void setProducts(List<Product> products) {
+    this.products = products;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        GreenbayUser user = (GreenbayUser) o;
-        return Objects.equals(id, user.id) && Objects.equals(username, user.username)
-                && Objects.equals(email, user.email) && Objects.equals(password,
-                user.password) && role == user.role && Objects.equals(balance, user.balance)
-                && Objects.equals(products, user.products);
-    }
+  public List<Bid> getBids() {
+    return bids;
+  }
 
-    @Override
-    public int hashCode() {
-        return 0;
-    }
+  public void setBids(List<Bid> bids) {
+    this.bids = bids;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    GreenbayUser user = (GreenbayUser) o;
+    return Objects.equals(id, user.id)
+        && Objects.equals(username, user.username)
+        && Objects.equals(email, user.email)
+        && Objects.equals(password, user.password)
+        && role == user.role
+        && Objects.equals(balance, user.balance)
+        && Objects.equals(products, user.products)
+        && Objects.equals(bids, user.bids);
+  }
+
+  @Override
+  public int hashCode() {
+    return 0;
+  }
 }

@@ -1,7 +1,6 @@
 package com.gfa.greenbay.dtos;
 
 import com.gfa.greenbay.entities.Bid;
-
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
