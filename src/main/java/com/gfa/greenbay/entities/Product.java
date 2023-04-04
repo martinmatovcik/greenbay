@@ -168,4 +168,10 @@ public class Product {
   public int hashCode() {
     return 0;
   }
+
+  public void placeBid(Bid bid) {
+    if (bids != null){
+      bids.add(bid);
+    }
+  }
 }

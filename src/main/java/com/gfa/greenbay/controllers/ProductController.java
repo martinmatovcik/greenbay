@@ -1,5 +1,6 @@
 package com.gfa.greenbay.controllers;
 
+import com.gfa.greenbay.dtos.PlaceBidRequestDto;
 import com.gfa.greenbay.dtos.ProductCreateResponseDto;
 import com.gfa.greenbay.dtos.ProductDto;
 import com.gfa.greenbay.dtos.ProductListResponseDto;
@@ -23,8 +24,8 @@ public class ProductController {
 
   @PostMapping
   public ResponseEntity<ProductCreateResponseDto> createProduct(
-      @Valid @RequestBody ProductDto product, HttpServletRequest request) {
-    return ResponseEntity.ok().body(productService.createProduct(product, request));
+      @Valid @RequestBody ProductDto product, HttpServletRequest httpRequest) {
+    return ResponseEntity.ok().body(productService.createProduct(product, httpRequest));
   }
 
   @GetMapping
@@ -37,5 +38,10 @@ public class ProductController {
   public ResponseEntity<ProductSpecificResponseDto> listSpecificProduct(
       @PathVariable("id") Long productId) {
     return ResponseEntity.ok().body(productService.listProductForId(productId));
+  }
+
+  @GetMapping("/bid")
+  public ResponseEntity<ProductSpecificResponseDto> placeBid(@RequestBody PlaceBidRequestDto bidRequest, HttpServletRequest httpRequest) {
+      return ResponseEntity.ok().body(productService.placeBid(bidRequest, httpRequest));
   }
 }
