@@ -3,6 +3,7 @@ package com.gfa.greenbay.entities;
 import com.gfa.greenbay.dtos.ProductDto;
 import java.util.List;
 import java.util.Objects;
+import javax.annotation.Nullable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,16 +29,21 @@ public class Product {
   private Integer startingPrice;
   private Integer purchasePrice;
   private Boolean sold = false;
-  private Integer lastBid = 0;
+  private Integer lastBid = 0;  //TODO -- use Bid or set the value
+
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
-  private GreenbayUser user;
+  @JoinColumn(name = "seller_id")
+  private GreenbayUser seller;
 
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
   private List<Bid> bids;
 
-  public Product() {
-  }
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "buyer_id")
+  @Nullable
+  private GreenbayUser buyer;
+
+  public Product() {}
 
   public Product(
       String name,
@@ -52,13 +58,13 @@ public class Product {
     this.purchasePrice = purchasePrice;
   }
 
-  public Product(ProductDto productDto, GreenbayUser user) {
+  public Product(ProductDto productDto, GreenbayUser seller) {
     this.name = productDto.getName();
     this.description = productDto.getDescription();
     this.photoUrl = productDto.getPhotoUrl();
     this.startingPrice = productDto.getStartingPrice();
     this.purchasePrice = productDto.getPurchasePrice();
-    this.user = user;
+    this.seller = seller;
   }
 
   public Long getId() {
@@ -125,12 +131,12 @@ public class Product {
     this.lastBid = lastBid;
   }
 
-  public GreenbayUser getUser() {
-    return user;
+  public GreenbayUser getSeller() {
+    return seller;
   }
 
-  public void setUser(GreenbayUser user) {
-    this.user = user;
+  public void setSeller(GreenbayUser seller) {
+    this.seller = seller;
   }
 
   public List<Bid> getBids() {
@@ -139,6 +145,15 @@ public class Product {
 
   public void setBids(List<Bid> bids) {
     this.bids = bids;
+  }
+
+  @Nullable
+  public GreenbayUser getBuyer() {
+    return buyer;
+  }
+
+  public void setBuyer(@Nullable GreenbayUser buyer) {
+    this.buyer = buyer;
   }
 
   @Override
@@ -154,8 +169,9 @@ public class Product {
         && Objects.equals(purchasePrice, product.purchasePrice)
         && Objects.equals(sold, product.sold)
         && Objects.equals(lastBid, product.lastBid)
-        && Objects.equals(user, product.user)
-        && Objects.equals(bids, product.bids);
+        && Objects.equals(seller, product.seller)
+        && Objects.equals(bids, product.bids)
+        && Objects.equals(buyer, product.buyer);
   }
 
   @Override

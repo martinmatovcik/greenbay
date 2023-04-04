@@ -1,10 +1,13 @@
 package com.gfa.greenbay.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.gfa.greenbay.entities.Bid;
 import com.gfa.greenbay.entities.Product;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.annotation.Nullable;
 
 public class ProductSpecificResponseDto {
   private String name;
@@ -13,6 +16,9 @@ public class ProductSpecificResponseDto {
   private List<BidDto> bids;
   private Integer purchasePrice;
   private String sellerUsername;
+  @JsonInclude(Include.NON_NULL)
+  @Nullable
+  private String buyersUsername;
 
   public ProductSpecificResponseDto() {}
 
@@ -23,7 +29,10 @@ public class ProductSpecificResponseDto {
     this.photoUrl = product.getPhotoUrl();
     this.bids = castBidsListToBidsDtoList(product.getBids());
     this.purchasePrice = product.getPurchasePrice();
-    this.sellerUsername = product.getUser().getUsername();
+    this.sellerUsername = product.getSeller().getUsername();
+    if (product.isSold()) {
+      this.buyersUsername = product.getBuyer().getUsername();
+    }
   }
 
   private List<BidDto> castBidsListToBidsDtoList(List<Bid> bids) {
@@ -82,17 +91,26 @@ public class ProductSpecificResponseDto {
     this.sellerUsername = sellerUsername;
   }
 
+  @Nullable
+  public String getBuyersUsername() {
+    return buyersUsername;
+  }
+
+  public void setBuyersUsername(@Nullable String buyersUsername) {
+    this.buyersUsername = buyersUsername;
+  }
+
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
     ProductSpecificResponseDto that = (ProductSpecificResponseDto) o;
-    return Objects.equals(name, that.name)
-        && Objects.equals(description, that.description)
-        && Objects.equals(photoUrl, that.photoUrl)
-        && Objects.equals(bids, that.bids)
-        && Objects.equals(purchasePrice, that.purchasePrice)
-        && Objects.equals(sellerUsername, that.sellerUsername);
+    return Objects.equals(name, that.name) && Objects.equals(description, that.description)
+        && Objects.equals(photoUrl, that.photoUrl) && Objects.equals(bids, that.bids)
+        && Objects.equals(purchasePrice, that.purchasePrice) && Objects.equals(sellerUsername,
+        that.sellerUsername) && Objects.equals(buyersUsername, that.buyersUsername);
   }
 
   @Override

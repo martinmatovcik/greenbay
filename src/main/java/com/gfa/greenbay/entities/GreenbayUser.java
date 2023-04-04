@@ -29,11 +29,14 @@ public class GreenbayUser implements UserDetails {
 
   private Integer balance;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-  private List<Product> products;
+  @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+  private List<Product> sellableProducts;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   private List<Bid> bids;
+
+  @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
+  private List<Product> boughtProducts;
 
   public GreenbayUser() {}
 
@@ -118,20 +121,28 @@ public class GreenbayUser implements UserDetails {
     this.balance = balance;
   }
 
-  public List<Product> getProducts() {
-    return products;
-  }
-
-  public void setProducts(List<Product> products) {
-    this.products = products;
-  }
-
   public List<Bid> getBids() {
     return bids;
   }
 
   public void setBids(List<Bid> bids) {
     this.bids = bids;
+  }
+
+  public List<Product> getSellableProducts() {
+    return sellableProducts;
+  }
+
+  public void setSellableProducts(List<Product> sellableProducts) {
+    this.sellableProducts = sellableProducts;
+  }
+
+  public List<Product> getBoughtProducts() {
+    return boughtProducts;
+  }
+
+  public void setBoughtProducts(List<Product> boughtProducts) {
+    this.boughtProducts = boughtProducts;
   }
 
   @Override
@@ -145,8 +156,9 @@ public class GreenbayUser implements UserDetails {
         && Objects.equals(password, user.password)
         && role == user.role
         && Objects.equals(balance, user.balance)
-        && Objects.equals(products, user.products)
-        && Objects.equals(bids, user.bids);
+        && Objects.equals(sellableProducts, user.sellableProducts)
+        && Objects.equals(bids, user.bids)
+        && Objects.equals(boughtProducts, user.boughtProducts);
   }
 
   @Override

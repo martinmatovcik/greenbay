@@ -50,14 +50,18 @@ public class GreenbayExceptionHandler {
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<ErrorDto> handleMissingRequestBody(HttpMessageNotReadableException ex) {
     return new ResponseEntity<>(
-        new ErrorDto(400, Collections.singletonList(ex.getMessage())),
-        HttpStatus.BAD_REQUEST);
+        new ErrorDto(400, Collections.singletonList(ex.getMessage())), HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<ErrorDto> handleIllegalArgument(IllegalArgumentException ex) {
     return new ResponseEntity<>(
-        new ErrorDto(400, Collections.singletonList(ex.getMessage())),
-        HttpStatus.BAD_REQUEST);
+        new ErrorDto(400, Collections.singletonList(ex.getMessage())), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(RuntimeException.class)
+  public ResponseEntity<ErrorDto> handleRuntimeExceptions(RuntimeException ex) {
+    return new ResponseEntity<>(
+        new ErrorDto(400, Collections.singletonList(ex.getMessage())), HttpStatus.BAD_REQUEST);
   }
 }
