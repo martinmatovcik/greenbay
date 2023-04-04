@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-  Page<Product> findAllByDeleted(Boolean deleted, Pageable pageable);
+  Page<Product> findAllBySold(Boolean deleted, Pageable pageable);
 }
