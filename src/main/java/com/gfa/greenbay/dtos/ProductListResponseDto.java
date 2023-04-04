@@ -1,6 +1,8 @@
 package com.gfa.greenbay.dtos;
 
+import com.gfa.greenbay.entities.Bid;
 import com.gfa.greenbay.entities.Product;
+import java.util.List;
 import java.util.Objects;
 
 public class ProductListResponseDto {
@@ -15,7 +17,10 @@ public class ProductListResponseDto {
   public ProductListResponseDto(Product product) {
     this.name = product.getName();
     this.photoUrl = product.getPhotoUrl();
-    this.lastBid = product.getLastBid();
+
+    List<Bid> bids = product.getBids();
+
+    this.lastBid = (bids == null || bids.isEmpty()) ? 0 : bids.get(bids.size() - 1).getValue();
   }
 
   public String getName() {

@@ -29,13 +29,12 @@ public class Product {
   private Integer startingPrice;
   private Integer purchasePrice;
   private Boolean sold = false;
-  private Integer lastBid = 0;  //TODO -- use Bid or set the value
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "seller_id")
   private GreenbayUser seller;
 
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+  @Nullable
   private List<Bid> bids;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -123,14 +122,6 @@ public class Product {
     this.sold = true;
   }
 
-  public Integer getLastBid() {
-    return lastBid;
-  }
-
-  public void setLastBid(Integer lastBid) {
-    this.lastBid = lastBid;
-  }
-
   public GreenbayUser getSeller() {
     return seller;
   }
@@ -168,7 +159,6 @@ public class Product {
         && Objects.equals(startingPrice, product.startingPrice)
         && Objects.equals(purchasePrice, product.purchasePrice)
         && Objects.equals(sold, product.sold)
-        && Objects.equals(lastBid, product.lastBid)
         && Objects.equals(seller, product.seller)
         && Objects.equals(bids, product.bids)
         && Objects.equals(buyer, product.buyer);
