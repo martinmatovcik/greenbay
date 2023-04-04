@@ -5,6 +5,7 @@ import com.gfa.greenbay.dtos.UserLoginRequestDto;
 import com.gfa.greenbay.dtos.UserRegisterRequestDto;
 import com.gfa.greenbay.entities.GreenbayUser;
 import com.gfa.greenbay.entities.enums.Role;
+import com.gfa.greenbay.exceptions.NotUniqueException;
 import com.gfa.greenbay.repositories.GreenbayUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,6 +41,10 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
 
   @Override
   public TokenResponseDto register(UserRegisterRequestDto requestDto) {
+    if (userRepository.findByUsername(requestDto.getUsername()).isPresent()){
+      throw new NotUniqueException("Username is taken!");
+    }
+
     GreenbayUser user =
         new GreenbayUser(
             requestDto.getUsername(),

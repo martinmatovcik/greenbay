@@ -9,6 +9,7 @@ import com.gfa.greenbay.services.ProductService;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,23 +26,24 @@ public class ProductController {
   @PostMapping
   public ResponseEntity<ProductCreateResponseDto> createProduct(
       @Valid @RequestBody ProductDto product, HttpServletRequest httpRequest) {
-    return ResponseEntity.ok().body(productService.createProduct(product, httpRequest));
+    return new ResponseEntity<>(
+        productService.createProduct(product, httpRequest), HttpStatus.CREATED);
   }
 
   @GetMapping
   public ResponseEntity<List<ProductListResponseDto>> listProducts(
       @RequestParam(required = false, value = "page", defaultValue = "0") Integer pageNumber) {
-    return ResponseEntity.ok().body(productService.listProducts(pageNumber));
+    return new ResponseEntity<>(productService.listProducts(pageNumber), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<ProductSpecificResponseDto> listSpecificProduct(
       @PathVariable("id") Long productId) {
-    return ResponseEntity.ok().body(productService.listProductForId(productId));
+    return new ResponseEntity<>(productService.listProductForId(productId), HttpStatus.OK);
   }
 
-  @GetMapping("/bid")
+  @PostMapping("/bid")
   public ResponseEntity<ProductSpecificResponseDto> placeBid(@RequestBody PlaceBidRequestDto bidRequest, HttpServletRequest httpRequest) {
-      return ResponseEntity.ok().body(productService.placeBid(bidRequest, httpRequest));
+      return new ResponseEntity<>(productService.placeBid(bidRequest, httpRequest), HttpStatus.CREATED);
   }
 }

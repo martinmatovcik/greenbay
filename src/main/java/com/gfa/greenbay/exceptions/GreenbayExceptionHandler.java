@@ -4,7 +4,6 @@ import com.gfa.greenbay.dtos.ErrorDto;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -40,11 +39,11 @@ public class GreenbayExceptionHandler {
         HttpStatus.FORBIDDEN);
   }
 
-  @ExceptionHandler(DataIntegrityViolationException.class)
-  public ResponseEntity<ErrorDto> handleNotUniqueUsername(DataIntegrityViolationException ex) {
+  @ExceptionHandler(NotUniqueException.class)
+  public ResponseEntity<ErrorDto> handleNotUnique(NotUniqueException ex) {
     return new ResponseEntity<>(
-        new ErrorDto(400, Collections.singletonList("Username is taken!")),
-        HttpStatus.BAD_REQUEST);
+        new ErrorDto(409, Collections.singletonList(ex.getMessage())),
+        ex.getStatus());
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -59,9 +58,15 @@ public class GreenbayExceptionHandler {
         new ErrorDto(400, Collections.singletonList(ex.getMessage())), HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(RuntimeException.class)
-  public ResponseEntity<ErrorDto> handleRuntimeExceptions(RuntimeException ex) {
+  @ExceptionHandler(IllegalOperationException.class)
+  public ResponseEntity<ErrorDto> handleIllegalOperation(IllegalOperationException ex) {
     return new ResponseEntity<>(
-        new ErrorDto(400, Collections.singletonList(ex.getMessage())), HttpStatus.BAD_REQUEST);
+        new ErrorDto(400, Collections.singletonList(ex.getMessage())), ex.getStatus());
+  }
+
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<ErrorDto> handleNotFound(NotFoundException ex) {
+    return new ResponseEntity<>(
+        new ErrorDto(404, Collections.singletonList(ex.getMessage())), ex.getStatus());
   }
 }

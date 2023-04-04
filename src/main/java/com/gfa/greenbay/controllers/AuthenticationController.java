@@ -6,6 +6,7 @@ import com.gfa.greenbay.dtos.UserRegisterRequestDto;
 import com.gfa.greenbay.services.GreenbayUserService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,12 +26,12 @@ public class AuthenticationController {
   @PostMapping("/register")
   public ResponseEntity<TokenResponseDto> register(
       @Valid @RequestBody UserRegisterRequestDto requestDto) {
-    return ResponseEntity.ok(userService.register(requestDto));
+    return new ResponseEntity<>(userService.register(requestDto), HttpStatus.CREATED);
   }
 
   @PostMapping("/login")
   public ResponseEntity<TokenResponseDto> login(
       @Valid @RequestBody UserLoginRequestDto requestDto) {
-    return ResponseEntity.ok(userService.login(requestDto));
+    return new ResponseEntity<>(userService.login(requestDto), HttpStatus.OK);
   }
 }

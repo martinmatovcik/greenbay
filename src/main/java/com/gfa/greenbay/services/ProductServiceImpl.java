@@ -8,6 +8,8 @@ import com.gfa.greenbay.dtos.ProductSpecificResponseDto;
 import com.gfa.greenbay.entities.Bid;
 import com.gfa.greenbay.entities.GreenbayUser;
 import com.gfa.greenbay.entities.Product;
+import com.gfa.greenbay.exceptions.IllegalOperationException;
+import com.gfa.greenbay.exceptions.NotFoundException;
 import com.gfa.greenbay.repositories.BidRepository;
 import com.gfa.greenbay.repositories.ProductRepository;
 import java.util.ArrayList;
@@ -70,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
   public Product loadProductForId(Long productId) {
     return productRepository
         .findById(productId)
-        .orElseThrow(() -> new RuntimeException("Id not found."));
+        .orElseThrow(() -> new NotFoundException("Product with this id was not found."));
   }
 
   @Override
@@ -79,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
     Product product = loadProductForId(bidRequest.getProductId());
 
     if (product.isSold()) {
-      throw new RuntimeException("This item can't be bought! It has been sold already.");
+      throw new IllegalOperationException("This item can't be bought! It has been sold already.");
     }
 
     GreenbayUser user =
@@ -88,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
     Integer bidValue = bidRequest.getValue();
 
     if (bidValue > user.getBalance()) {
-      throw new RuntimeException("There is not enough money in your account.");
+      throw new IllegalOperationException("There is not enough money in your account.");
     }
 
     List<Bid> bids = product.getBids();
@@ -99,12 +101,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     if (bidValue.equals(highestBid)) {
-      throw new RuntimeException(
+      throw new IllegalOperationException(
           "Bid needs to be higher than the previous one. Highest bid for this item is: "
               + highestBid);
     }
     if (bidValue < highestBid) {
-      throw new RuntimeException(
+      throw new IllegalOperationException(
           "Bid is too low. Highest bid for this item is: " + highestBid);
     }
 
