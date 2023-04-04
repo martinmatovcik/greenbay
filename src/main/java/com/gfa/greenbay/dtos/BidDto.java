@@ -7,7 +7,7 @@ import java.util.Objects;
 public class BidDto {
     private OffsetDateTime createdAt;
     private Integer value;
-    private String userUsername;
+    private String bidderUsername;
 
     public BidDto() {
     }
@@ -15,7 +15,7 @@ public class BidDto {
     public BidDto(Bid bid) {
         this.createdAt = bid.getCreatedAt();
         this.value = bid.getValue();
-        this.userUsername = bid.getUser().getUsername();
+        this.bidderUsername = bid.getUser().getUsername();
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -34,12 +34,12 @@ public class BidDto {
         this.value = value;
     }
 
-    public String getUserUsername() {
-        return userUsername;
+    public String getBidderUsername() {
+        return bidderUsername;
     }
 
-    public void setUserUsername(String userUsername) {
-        this.userUsername = userUsername;
+    public void setBidderUsername(String bidderUsername) {
+        this.bidderUsername = bidderUsername;
     }
 
     @Override
@@ -47,7 +47,8 @@ public class BidDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BidDto bidDto = (BidDto) o;
-        return Objects.equals(value, bidDto.value) && Objects.equals(createdAt, bidDto.createdAt) && Objects.equals(userUsername, bidDto.userUsername);
+        return Objects.equals(value, bidDto.value) && Objects.equals(createdAt, bidDto.createdAt) && Objects.equals(
+            bidderUsername, bidDto.bidderUsername);
     }
 
     @Override

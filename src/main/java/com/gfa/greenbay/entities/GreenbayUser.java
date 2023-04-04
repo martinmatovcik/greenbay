@@ -14,99 +14,100 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "users")
 public class GreenbayUser implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(unique = true)
-    private String username;
+  @Column(unique = true)
+  private String username;
 
-    private String email;
-    private String password;
+  private String email;
+  private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+  @Enumerated(EnumType.STRING)
+  private Role role;
 
-    private Integer balance;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Product> products;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Bid> bids;
+  private Integer balance;
 
-    public GreenbayUser() {
-    }
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  private List<Product> products;
 
-    public GreenbayUser(String username, String email, String password, Role role) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.balance = 0;
-    }
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  private List<Bid> bids;
 
-    public Long getId() {
-        return id;
-    }
+  public GreenbayUser() {}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public GreenbayUser(String username, String email, String password, Role role) {
+    this.username = username;
+    this.email = email;
+    this.password = password;
+    this.role = role;
+    this.balance = 0;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public Role getRole() {
-        return role;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  public Role getRole() {
+    return role;
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  public void setRole(Role role) {
+    this.role = role;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public Integer getBalance() {

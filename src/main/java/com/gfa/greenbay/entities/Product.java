@@ -13,13 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "products")
-@SQLDelete(sql = "UPDATE products SET sold = true WHERE id=?")
-@Where(clause = "sold=false")
 public class Product {
 
   @Id
@@ -137,21 +133,29 @@ public class Product {
     this.user = user;
   }
 
+  public List<Bid> getBids() {
+    return bids;
+  }
+
+  public void setBids(List<Bid> bids) {
+    this.bids = bids;
+  }
+
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
     Product product = (Product) o;
-    return Objects.equals(id, product.id) && Objects.equals(name, product.name)
-        && Objects.equals(description, product.description) && Objects.equals(
-        photoUrl, product.photoUrl) && Objects.equals(startingPrice, product.startingPrice)
-        && Objects.equals(purchasePrice, product.purchasePrice) && Objects.equals(
-        sold, product.sold) && Objects.equals(lastBid, product.lastBid)
-        && Objects.equals(user, product.user);
+    return Objects.equals(id, product.id)
+        && Objects.equals(name, product.name)
+        && Objects.equals(description, product.description)
+        && Objects.equals(photoUrl, product.photoUrl)
+        && Objects.equals(startingPrice, product.startingPrice)
+        && Objects.equals(purchasePrice, product.purchasePrice)
+        && Objects.equals(sold, product.sold)
+        && Objects.equals(lastBid, product.lastBid)
+        && Objects.equals(user, product.user)
+        && Objects.equals(bids, product.bids);
   }
 
   @Override
