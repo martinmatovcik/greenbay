@@ -58,6 +58,6 @@ public class ProductServiceImpl implements ProductService {
     return new ProductSpecificResponseDto(
         productRepository
             .findById(productId)
-            .orElseThrow(() -> new RuntimeException("Id not found."))); // TODO -- handle this ex
+            .orElseThrow(() -> new RuntimeException("Id not found.")));
   }
 }
