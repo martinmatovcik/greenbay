@@ -41,7 +41,7 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
 
   @Override
   public TokenResponseDto register(UserRegisterRequestDto requestDto) {
-    if (userRepository.findByUsername(requestDto.getUsername()).isPresent()){
+    if (isUsernamePresent(requestDto.getUsername())) {
       throw new NotUniqueException("Username is taken!");
     }
 
@@ -61,16 +61,20 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
   public TokenResponseDto login(UserLoginRequestDto requestDto) {
 
     try {
-      authenticationManager.authenticate(
+      authenticationManager.authenticate(   //todo -- how to mock this???
           new UsernamePasswordAuthenticationToken(
               requestDto.getUsername(), requestDto.getPassword()));
     } catch (AuthenticationException e) {
       throw new BadCredentialsException("Username or password is not correct!");
     }
 
-    GreenbayUser user = (GreenbayUser) userDetailsService.loadUserByUsername(
-        requestDto.getUsername());
+    GreenbayUser user =
+        (GreenbayUser) userDetailsService.loadUserByUsername(requestDto.getUsername());
     String jwtToken = jwtService.generateToken(user);
     return new TokenResponseDto(jwtToken);
+  }
+
+  private Boolean isUsernamePresent(String username) {
+    return userRepository.findByUsername(username).isPresent();
   }
 }
