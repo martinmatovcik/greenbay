@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import com.gfa.greenbay.dtos.TokenResponseDto;
 import com.gfa.greenbay.dtos.UserLoginRequestDto;
 import com.gfa.greenbay.dtos.UserRegisterRequestDto;
 import com.gfa.greenbay.entities.GreenbayUser;
@@ -14,7 +13,6 @@ import com.gfa.greenbay.entities.enums.Role;
 import com.gfa.greenbay.exceptions.NotUniqueException;
 import com.gfa.greenbay.repositories.GreenbayUserRepository;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,12 +32,6 @@ public class GreenbayUserServiceTest {
   @MockBean UserDetailsService userDetailsService;
   @MockBean AuthenticationManager authenticationManager;
   @MockBean PasswordEncoder passwordEncoder;
-  //  MockMvc mockMvc;
-
-  @BeforeEach
-  public void setup() {
-    //    this.mockMvc = MockMvcBuilders.standaloneSetup(userService).build();
-  }
 
   @Test
   public void register_successful() {
@@ -48,10 +40,10 @@ public class GreenbayUserServiceTest {
         new UserRegisterRequestDto("username", "username@email.com", "password");
 
     // When
-    TokenResponseDto actualResponseDto = userService.register(requestDto);
+    String actualToken = userService.register(requestDto.toUser());
 
     // Then
-    assertEquals("username", jwtService.extractUsername(actualResponseDto.getToken()));
+    assertEquals("username", jwtService.extractUsername(actualToken));
   }
 
   @Test
@@ -64,7 +56,7 @@ public class GreenbayUserServiceTest {
 
     // When
     Exception exception =
-        assertThrows(NotUniqueException.class, () -> userService.register(requestDto));
+        assertThrows(NotUniqueException.class, () -> userService.register(requestDto.toUser()));
 
     // Then
     assertThat(exception.getMessage()).contains("Username is taken!");
@@ -77,14 +69,14 @@ public class GreenbayUserServiceTest {
 
     GreenbayUser user =
         new GreenbayUser("username", "user@email.com", "password", Role.USER);
-
+    
     when(userDetailsService.loadUserByUsername("username")).thenReturn(user);
 
     // When
-    TokenResponseDto actualResponseDto = userService.login(requestDto);
+    String actualToken = userService.login(requestDto.getUsername(), requestDto.getPassword());
 
     // Then
-    assertEquals("username", jwtService.extractUsername(actualResponseDto.getToken()));
+    assertEquals("username", jwtService.extractUsername(actualToken));
   }
 
   @Test
@@ -96,7 +88,9 @@ public class GreenbayUserServiceTest {
 
     // When
     Exception exception =
-        assertThrows(BadCredentialsException.class, () -> userService.login(requestDto));
+        assertThrows(
+            BadCredentialsException.class,
+            () -> userService.login(requestDto.getUsername(), requestDto.getPassword()));
 
     // Then
     assertThat(exception.getMessage()).contains("Username or password is not correct!");

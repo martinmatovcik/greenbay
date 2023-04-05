@@ -1,6 +1,5 @@
 package com.gfa.greenbay.entities;
 
-import com.gfa.greenbay.dtos.ProductDto;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nullable;
@@ -55,15 +54,6 @@ public class Product {
     this.photoUrl = photoUrl;
     this.startingPrice = startingPrice;
     this.purchasePrice = purchasePrice;
-  }
-
-  public Product(ProductDto productDto, GreenbayUser seller) {
-    this.name = productDto.getName();
-    this.description = productDto.getDescription();
-    this.photoUrl = productDto.getPhotoUrl();
-    this.startingPrice = productDto.getStartingPrice();
-    this.purchasePrice = productDto.getPurchasePrice();
-    this.seller = seller;
   }
 
   public Long getId() {

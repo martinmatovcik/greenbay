@@ -1,5 +1,7 @@
 package com.gfa.greenbay.dtos;
 
+import com.gfa.greenbay.entities.GreenbayUser;
+import com.gfa.greenbay.entities.Product;
 import java.util.Objects;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -94,5 +96,18 @@ public class ProductDto {
   @Override
   public int hashCode() {
     return 0;
+  }
+
+  public Product toProductForUser(GreenbayUser user) {
+    Product product = new Product();
+
+    product.setName(this.name);
+    product.setDescription(this.description);
+    product.setPhotoUrl(this.photoUrl);
+    product.setStartingPrice(this.startingPrice);
+    product.setPurchasePrice(this.purchasePrice);
+    product.setSeller(user);
+
+    return product;
   }
 }

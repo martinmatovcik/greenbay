@@ -1,5 +1,8 @@
 package com.gfa.greenbay.dtos;
 
+import com.gfa.greenbay.entities.Bid;
+import com.gfa.greenbay.entities.GreenbayUser;
+import com.gfa.greenbay.entities.Product;
 import java.util.Objects;
 
 public class PlaceBidRequestDto {
@@ -40,5 +43,9 @@ public class PlaceBidRequestDto {
   @Override
   public int hashCode() {
     return 0;
+  }
+
+  public Bid toBidForUser(Product product, GreenbayUser user) {
+    return new Bid(product, user, this.value);
   }
 }

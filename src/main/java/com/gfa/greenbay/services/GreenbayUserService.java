@@ -1,11 +1,9 @@
 package com.gfa.greenbay.services;
 
-import com.gfa.greenbay.dtos.TokenResponseDto;
-import com.gfa.greenbay.dtos.UserLoginRequestDto;
-import com.gfa.greenbay.dtos.UserRegisterRequestDto;
+import com.gfa.greenbay.entities.GreenbayUser;
 
 public interface GreenbayUserService {
-  TokenResponseDto register(UserRegisterRequestDto requestDto);
+  String register(GreenbayUser userToRegister);
 
-  TokenResponseDto login(UserLoginRequestDto requestDto);
+  String login(String username, String password);
 }

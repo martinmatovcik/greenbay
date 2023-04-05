@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.gfa.greenbay.entities.Bid;
 import com.gfa.greenbay.entities.Product;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nullable;
@@ -27,10 +28,17 @@ public class ProductSpecificResponseDto {
     this.description = product.getDescription();
     this.description = product.getDescription();
     this.photoUrl = product.getPhotoUrl();
-    this.bids = castBidsListToBidsDtoList(product.getBids());
+
+    if (product.getBids() != null && !product.getBids().isEmpty()) {
+      this.bids = castBidsListToBidsDtoList(product.getBids());
+    } else {
+      this.bids = Collections.emptyList();
+    }
+
     this.purchasePrice = product.getPurchasePrice();
     this.sellerUsername = product.getSeller().getUsername();
-    if (product.isSold()) {
+
+    if (product.isSold() && product.getBuyer() != null) {
       this.buyersUsername = product.getBuyer().getUsername();
     }
   }

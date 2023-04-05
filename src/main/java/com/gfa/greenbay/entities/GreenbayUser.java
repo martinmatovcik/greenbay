@@ -76,8 +76,12 @@ public class GreenbayUser implements UserDetails {
     return role;
   }
 
-  public void setRole(Role role) {
-    this.role = role;
+  public void setUser() {
+    this.role = Role.USER;
+  }
+
+  public void setAdmin() {
+    this.role = Role.ADMIN;
   }
 
   @Override

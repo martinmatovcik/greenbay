@@ -1,5 +1,7 @@
 package com.gfa.greenbay.dtos;
 
+import com.gfa.greenbay.entities.GreenbayUser;
+import com.gfa.greenbay.entities.enums.Role;
 import java.util.Objects;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -62,5 +64,9 @@ public class UserRegisterRequestDto {
   @Override
   public int hashCode() {
     return 0;
+  }
+
+  public GreenbayUser toUser() {
+    return new GreenbayUser(this.username, this.email, this.password, Role.USER);
   }
 }

@@ -1,10 +1,6 @@
 package com.gfa.greenbay.services;
 
-import com.gfa.greenbay.dtos.TokenResponseDto;
-import com.gfa.greenbay.dtos.UserLoginRequestDto;
-import com.gfa.greenbay.dtos.UserRegisterRequestDto;
 import com.gfa.greenbay.entities.GreenbayUser;
-import com.gfa.greenbay.entities.enums.Role;
 import com.gfa.greenbay.exceptions.NotUniqueException;
 import com.gfa.greenbay.repositories.GreenbayUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +26,7 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
       GreenbayUserRepository userRepository,
       PasswordEncoder passwordEncoder,
       JwtService jwtService,
-      AuthenticationManager authenticationManager,
-      UserDetailsService userDetailsService) {
+      AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
     this.jwtService = jwtService;
@@ -40,38 +35,36 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
   }
 
   @Override
-  public TokenResponseDto register(UserRegisterRequestDto requestDto) {
-    if (isUsernamePresent(requestDto.getUsername())) {
+  public String register(GreenbayUser userToRegister) {
+    if (isUsernamePresent(userToRegister.getUsername())) {
       throw new NotUniqueException("Username is taken!");
     }
 
-    GreenbayUser user =
+    GreenbayUser registeredUser =
         new GreenbayUser(
-            requestDto.getUsername(),
-            requestDto.getEmail(),
-            passwordEncoder.encode(requestDto.getPassword()),
-            Role.USER);
-    userRepository.save(user);
+            userToRegister.getUsername(),
+            userToRegister.getEmail(),
+            passwordEncoder.encode(userToRegister.getPassword()),
+            userToRegister.getRole());
+    userRepository.save(registeredUser);
 
-    String jwtToken = jwtService.generateToken(user);
-    return new TokenResponseDto(jwtToken);
+    return jwtService.generateToken(registeredUser);
   }
 
   @Override
-  public TokenResponseDto login(UserLoginRequestDto requestDto) {
-
+  public String login(String username, String password) {
     try {
       authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
-              requestDto.getUsername(), requestDto.getPassword()));
+              username, password));
     } catch (AuthenticationException e) {
       throw new BadCredentialsException("Username or password is not correct!");
     }
 
     GreenbayUser user =
-        (GreenbayUser) userDetailsService.loadUserByUsername(requestDto.getUsername());
-    String jwtToken = jwtService.generateToken(user);
-    return new TokenResponseDto(jwtToken);
+        (GreenbayUser) userDetailsService.loadUserByUsername(username);
+    
+    return jwtService.generateToken(user);
   }
 
   private Boolean isUsernamePresent(String username) {
