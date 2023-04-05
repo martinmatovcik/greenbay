@@ -61,7 +61,7 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
   public TokenResponseDto login(UserLoginRequestDto requestDto) {
 
     try {
-      authenticationManager.authenticate(   //todo -- how to mock this???
+      authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
               requestDto.getUsername(), requestDto.getPassword()));
     } catch (AuthenticationException e) {

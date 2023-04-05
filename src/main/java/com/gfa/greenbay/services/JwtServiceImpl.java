@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class JwtServiceImpl implements JwtService {
 
   private final String SECRET_KEY;
-  private JwtParser jwtParser;
+  private final JwtParser jwtParser;
 
   public JwtServiceImpl(@Value("${JWT_SECRET_KEY}") String SECRET_KEY) {
     this.SECRET_KEY = SECRET_KEY;
