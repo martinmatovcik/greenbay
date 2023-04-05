@@ -6,6 +6,7 @@ import com.gfa.greenbay.entities.Product;
 import com.gfa.greenbay.exceptions.IllegalOperationException;
 import com.gfa.greenbay.exceptions.NotFoundException;
 import com.gfa.greenbay.repositories.BidRepository;
+import com.gfa.greenbay.repositories.GreenbayUserRepository;
 import com.gfa.greenbay.repositories.ProductRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,17 @@ public class ProductServiceImpl implements ProductService {
 
   private final ProductRepository productRepository;
   private final BidRepository bidRepository;
+  private final GreenbayUserRepository userRepository;
   private static final Integer PAGE_SIZE = 20;
 
   @Autowired
   public ProductServiceImpl(
       ProductRepository productRepository,
-      BidRepository bidRepository) {
+      BidRepository bidRepository,
+      GreenbayUserRepository userRepository) {
     this.productRepository = productRepository;
     this.bidRepository = bidRepository;
+    this.userRepository = userRepository;
   }
 
   @Override
@@ -68,20 +72,17 @@ public class ProductServiceImpl implements ProductService {
       highestBid = bids.get(bids.size() - 1).getValue();
     }
 
-    if (bidValue.equals(highestBid)) {
+    //todo -- missing case -- bids.isEmpty() && bid < product.getStartingPrice()
+
+    if (bidValue <= highestBid) {
       throw new IllegalOperationException(
           "Bid needs to be higher than the previous one. Highest bid for this item is: "
               + highestBid);
     }
-    
-    if (bidValue < highestBid) {
-      throw new IllegalOperationException(
-          "Bid is too low. Highest bid for this item is: " + highestBid);
-    }
 
-    Bid placedBid = bidRepository.save(new Bid(product, user, bidValue));
-    product.placeBid(placedBid);
-
-    return productRepository.save(product);
+    bidRepository.save(bid);
+    return productRepository
+        .findById(product.getId())
+        .orElseThrow(() -> new NotFoundException("Product was not found."));
   }
 }

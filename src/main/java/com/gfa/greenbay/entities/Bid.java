@@ -63,26 +63,38 @@ public class Bid {
     }
 
     public void setValue(Integer value) {
-        this.value = value;
-    }
+    this.value = value;
+  }
 
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
+  public OffsetDateTime getCreatedAt() {
+    return createdAt;
+  }
 
-    public void setCreatedAt(OffsetDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+  public void setCreatedAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Bid bid = (Bid) o;
+  public Bid copy() {
+    Bid bid = new Bid();
+
+    bid.setId(this.id);
+    bid.setProduct(this.product);
+    bid.setUser(this.user);
+    bid.setValue(this.value);
+    bid.setCreatedAt(this.createdAt);
+
+    return bid;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Bid bid = (Bid) o;
         return Objects.equals(id, bid.id) && Objects.equals(product, bid.product)
                 && Objects.equals(user, bid.user) && Objects.equals(value, bid.value)
                 && Objects.equals(createdAt, bid.createdAt);

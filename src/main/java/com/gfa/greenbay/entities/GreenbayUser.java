@@ -1,6 +1,7 @@
 package com.gfa.greenbay.entities;
 
 import com.gfa.greenbay.entities.enums.Role;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -27,25 +28,25 @@ public class GreenbayUser implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  private Integer balance;
+  private Integer balance = 0;
 
   @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
-  private List<Product> sellableProducts;
+  private List<Product> sellableProducts = new ArrayList<>();
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-  private List<Bid> bids;
+  private List<Bid> bids = new ArrayList<>();
 
   @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
-  private List<Product> boughtProducts;
+  private List<Product> boughtProducts = new ArrayList<>();
 
-  public GreenbayUser() {}
+  public GreenbayUser() {
+  }
 
   public GreenbayUser(String username, String email, String password, Role role) {
     this.username = username;
     this.email = email;
     this.password = password;
     this.role = role;
-    this.balance = 0;
   }
 
   public Long getId() {

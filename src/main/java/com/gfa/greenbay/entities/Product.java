@@ -1,5 +1,6 @@
 package com.gfa.greenbay.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nullable;
@@ -28,13 +29,13 @@ public class Product {
   private Integer startingPrice;
   private Integer purchasePrice;
   private Boolean sold = false;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "seller_id")
   private GreenbayUser seller;
 
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-  @Nullable
-  private List<Bid> bids;
+  private List<Bid> bids = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "buyer_id")
@@ -108,7 +109,11 @@ public class Product {
     return sold;
   }
 
-  public void setSold() {
+  public void setSold(Boolean sold) {
+    this.sold = sold;
+  }
+
+  public void sold() {
     this.sold = true;
   }
 
@@ -160,8 +165,23 @@ public class Product {
   }
 
   public void placeBid(Bid bid) {
-    if (bids != null){
-      bids.add(bid);
-    }
+    this.bids.add(bid);
+  }
+
+  public Product copy() {
+    Product product = new Product();
+
+    product.setId(this.id);
+    product.setName(this.name);
+    product.setDescription(this.description);
+    product.setPhotoUrl(this.photoUrl);
+    product.setStartingPrice(this.startingPrice);
+    product.setPurchasePrice(this.purchasePrice);
+    product.setSold(this.sold);
+    product.setSeller(this.seller);
+    product.setBids(new ArrayList<>(this.bids));
+    product.setBuyer(this.buyer);
+
+    return product;
   }
 }
