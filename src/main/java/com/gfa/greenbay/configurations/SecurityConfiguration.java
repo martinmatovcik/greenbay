@@ -35,7 +35,7 @@ public class SecurityConfiguration {
         .cors()
         .disable()
         .authorizeRequests()
-        .antMatchers("/api/auth/**")
+        .antMatchers("/api/auth/**", "/error")
         .permitAll()
         .antMatchers(HttpMethod.DELETE)
         .hasAuthority(String.valueOf(Role.ADMIN))

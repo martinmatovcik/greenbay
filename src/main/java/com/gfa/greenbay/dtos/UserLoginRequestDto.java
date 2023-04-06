@@ -1,13 +1,13 @@
 package com.gfa.greenbay.dtos;
 
 import java.util.Objects;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 public class UserLoginRequestDto {
-  @NotNull(message = "Username can not be empty.")
+  @NotBlank(message = "Username can not be empty.")
   private String username;
 
-  @NotNull(message = "Password can not be empty.")
+  @NotBlank(message = "Password can not be empty.")
   private String password;
 
   public UserLoginRequestDto() {}

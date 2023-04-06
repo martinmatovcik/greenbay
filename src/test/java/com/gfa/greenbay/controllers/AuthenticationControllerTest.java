@@ -255,11 +255,11 @@ public class AuthenticationControllerTest {
                         .contains("Username or password is not correct!")))
         .andDo(print());
   }
+
   @Test
   public void login_invalidInput_throwsMethodArgumentNotValidException() throws Exception {
     // Given
-    loginJSON =
-        "{\n" + "    \"username\": \"\",\n" + "    \"password\": \"\"\n" + "}";
+    loginJSON = "{\n" + "    \"username\": \"\",\n" + "    \"password\": \"\"\n" + "}";
 
     // When
     mockMvc
@@ -270,15 +270,18 @@ public class AuthenticationControllerTest {
                 .characterEncoding("UTF-8")
                 .accept(MediaType.APPLICATION_JSON))
         // Then
-        .andExpect(status().isUnauthorized())
+        .andExpect(status().isBadRequest())
         .andExpect(
-            result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
+            result ->
+                assertTrue(
+                    result.getResolvedException() instanceof MethodArgumentNotValidException))
         .andExpect(
             result ->
                 assertTrue(
                     Objects.requireNonNull(result.getResolvedException())
                         .getMessage()
-                        .contains("Username can not be empty."))).andExpect(
+                        .contains("Username can not be empty.")))
+        .andExpect(
             result ->
                 assertTrue(
                     Objects.requireNonNull(result.getResolvedException())
