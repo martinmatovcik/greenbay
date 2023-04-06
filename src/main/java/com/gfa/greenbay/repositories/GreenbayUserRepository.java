@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GreenbayUserRepository extends JpaRepository<GreenbayUser, Long> {
   Optional<GreenbayUser> findByUsername(String username);
+  void deleteById(Long id);
 }

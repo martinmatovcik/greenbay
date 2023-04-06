@@ -1,6 +1,7 @@
 package com.gfa.greenbay.services;
 
 import com.gfa.greenbay.entities.GreenbayUser;
+import com.gfa.greenbay.exceptions.NotFoundException;
 import com.gfa.greenbay.exceptions.NotUniqueException;
 import com.gfa.greenbay.repositories.GreenbayUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,14 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
         (GreenbayUser) userDetailsService.loadUserByUsername(username);
     
     return jwtService.generateToken(user);
+  }
+
+  @Override
+  public void deleteUser(Long userId) {
+    userRepository
+        .findById(userId)
+        .orElseThrow(() -> new NotFoundException("User was not found."));
+    userRepository.deleteById(userId);
   }
 
   private Boolean isUsernamePresent(String username) {

@@ -6,7 +6,6 @@ import com.gfa.greenbay.entities.Product;
 import com.gfa.greenbay.exceptions.IllegalOperationException;
 import com.gfa.greenbay.exceptions.NotFoundException;
 import com.gfa.greenbay.repositories.BidRepository;
-import com.gfa.greenbay.repositories.GreenbayUserRepository;
 import com.gfa.greenbay.repositories.ProductRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +19,12 @@ public class ProductServiceImpl implements ProductService {
 
   private final ProductRepository productRepository;
   private final BidRepository bidRepository;
-  private final GreenbayUserRepository userRepository;
   private static final Integer PAGE_SIZE = 20;
 
   @Autowired
-  public ProductServiceImpl(
-      ProductRepository productRepository,
-      BidRepository bidRepository,
-      GreenbayUserRepository userRepository) {
+  public ProductServiceImpl(ProductRepository productRepository, BidRepository bidRepository) {
     this.productRepository = productRepository;
     this.bidRepository = bidRepository;
-    this.userRepository = userRepository;
   }
 
   @Override
@@ -84,5 +78,21 @@ public class ProductServiceImpl implements ProductService {
     return productRepository
         .findById(product.getId())
         .orElseThrow(() -> new NotFoundException("Product was not found."));
+  }
+
+  @Override
+  public void deleteProduct(Long productId) {
+    productRepository
+        .findById(productId)
+        .orElseThrow(() -> new NotFoundException("Product was not found."));
+    productRepository.deleteById(productId);
+  }
+
+  @Override
+  public void deleteBid(Long bidId) {
+    bidRepository
+        .findById(bidId)
+        .orElseThrow(() -> new NotFoundException("Bid was not found."));
+    bidRepository.deleteById(bidId);
   }
 }

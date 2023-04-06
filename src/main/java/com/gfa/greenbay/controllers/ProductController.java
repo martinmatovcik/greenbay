@@ -1,5 +1,6 @@
 package com.gfa.greenbay.controllers;
 
+import com.gfa.greenbay.dtos.MessageDto;
 import com.gfa.greenbay.dtos.PlaceBidRequestDto;
 import com.gfa.greenbay.dtos.ProductCreateResponseDto;
 import com.gfa.greenbay.dtos.ProductDto;
@@ -83,4 +84,16 @@ public class ProductController {
 
     return new ResponseEntity<>(productSpecificResponseDto, HttpStatus.CREATED);
   }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<MessageDto> deleteProduct(@PathVariable("id") Long productId){
+    productService.deleteProduct(productId);
+    return new ResponseEntity<>(new MessageDto("Successfully deleted."), HttpStatus.OK);
+  }
+  @DeleteMapping("/bid/{id}")
+  public ResponseEntity<MessageDto> deleteBid(@PathVariable("id") Long bidId){
+    productService.deleteBid(bidId);
+    return new ResponseEntity<>(new MessageDto("Successfully deleted."), HttpStatus.OK);
+  }
+
 }

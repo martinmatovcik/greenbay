@@ -6,4 +6,6 @@ public interface GreenbayUserService {
   String register(GreenbayUser userToRegister);
 
   String login(String username, String password);
+
+  void deleteUser(Long userId);
 }
