@@ -47,7 +47,7 @@ public class GreenbayUserServiceTest {
   }
 
   @Test
-  public void register_username_is_taken() {
+  public void register_usernameIsTaken_throwsNotUniqueException() {
     // Given
     UserRegisterRequestDto requestDto =
         new UserRegisterRequestDto("username", "username@email.com", "password");
@@ -80,7 +80,7 @@ public class GreenbayUserServiceTest {
   }
 
   @Test
-  public void login_bad_credentials() {
+  public void login_badCredentials_throwsBadCredentialsException() {
     // Given
     UserLoginRequestDto requestDto = new UserLoginRequestDto("username", "password");
 

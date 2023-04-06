@@ -35,8 +35,8 @@ public class GreenbayExceptionHandler {
   @ExceptionHandler(BadCredentialsException.class)
   public ResponseEntity<ErrorDto> handleBadCredentialsException(BadCredentialsException ex) {
     return new ResponseEntity<>(
-        new ErrorDto(403, Collections.singletonList(ex.getMessage())),
-        HttpStatus.FORBIDDEN);
+        new ErrorDto(401, Collections.singletonList(ex.getMessage())),
+        HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(NotUniqueException.class)
