@@ -15,7 +15,7 @@ public class ProductDto {
   private String description;
 
   @NotBlank(message = "Photo-url can not be empty.")
-  @org.hibernate.validator.constraints.URL(message = "Please provide valid URL")
+  @org.hibernate.validator.constraints.URL(message = "Please provide valid URL.")
   private String photoUrl;
 
   @NotNull(message = "Starting price can not be empty.")
@@ -23,7 +23,7 @@ public class ProductDto {
   private Integer startingPrice;
 
   @NotNull(message = "Purchase price can not be empty.")
-  @Min(value = 0, message = "Starting price needs to be positive integer.")
+  @Min(value = 0, message = "Purchase price needs to be positive integer.")
   private Integer purchasePrice;
 
   public ProductDto() {}

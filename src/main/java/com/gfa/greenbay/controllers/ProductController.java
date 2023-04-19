@@ -90,6 +90,7 @@ public class ProductController {
     productService.deleteProduct(productId);
     return new ResponseEntity<>(new MessageDto("Successfully deleted."), HttpStatus.OK);
   }
+
   @DeleteMapping("/bid/{id}")
   public ResponseEntity<MessageDto> deleteBid(@PathVariable("id") Long bidId){
     productService.deleteBid(bidId);
