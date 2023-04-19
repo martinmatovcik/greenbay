@@ -60,13 +60,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     List<Bid> bids = product.getBids();
-    Integer highestBid = 0;
 
-    if (bids != null && !bids.isEmpty()) {
-      highestBid = bids.get(bids.size() - 1).getValue();
+    if (bids.isEmpty() && bidValue < product.getStartingPrice()) {
+      throw new IllegalOperationException("Your bid has to be higher than the starting price!");
     }
 
-    //todo -- missing case -- bids.isEmpty() && bid < product.getStartingPrice()
+    Integer highestBid = 0;
+    if (!bids.isEmpty()) {
+      highestBid = bids.get(bids.size() - 1).getValue();
+    }
 
     if (bidValue <= highestBid) {
       throw new IllegalOperationException(
@@ -75,9 +77,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     bidRepository.save(bid);
+
+    if (bidValue >= product.getPurchasePrice()) {
+      product.setBuyer(user);
+      productRepository.save(product);
+    }
+
     return productRepository
         .findById(product.getId())
-        .orElseThrow(() -> new NotFoundException("Product was not found."));
+        .orElseThrow(() -> new NotFoundException("Product was not found"));
   }
 
   @Override
@@ -90,9 +98,7 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   public void deleteBid(Long bidId) {
-    bidRepository
-        .findById(bidId)
-        .orElseThrow(() -> new NotFoundException("Bid was not found."));
+    bidRepository.findById(bidId).orElseThrow(() -> new NotFoundException("Bid was not found."));
     bidRepository.deleteById(bidId);
   }
 }
