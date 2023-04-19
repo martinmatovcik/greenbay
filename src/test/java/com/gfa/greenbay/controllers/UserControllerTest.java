@@ -34,9 +34,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @SpringBootTest
-public class AuthenticationControllerTest {
+public class UserControllerTest {
 
-  @Autowired AuthenticationController authenticationController;
+  @Autowired
+  UserController userController;
   @Autowired GreenbayUserServiceImpl userService;
   @Autowired GreenbayExceptionHandler exceptionHandler;
 
@@ -51,7 +52,7 @@ public class AuthenticationControllerTest {
   @BeforeEach
   public void setup() {
     this.mockMvc =
-        MockMvcBuilders.standaloneSetup(authenticationController)
+        MockMvcBuilders.standaloneSetup(userController)
             .setControllerAdvice(new GreenbayExceptionHandler())
             .build();
     loginJSON =
@@ -124,13 +125,10 @@ public class AuthenticationControllerTest {
         .andExpect(
             result ->
                 assertTrue(
-                    result.getResolvedException() instanceof HttpMessageNotReadableException))
-        .andExpect(
-            result ->
-                assertTrue(
-                    Objects.requireNonNull(result.getResolvedException())
-                        .getMessage()
-                        .contains("Required request body is missing")))
+                    result.getResolvedException() instanceof HttpMessageNotReadableException
+                        && Objects.requireNonNull(result.getResolvedException())
+                            .getMessage()
+                            .contains("Required request body is missing")))
         .andExpect(jsonPath("$.statusCode", is(400)));
   }
 
@@ -152,13 +150,10 @@ public class AuthenticationControllerTest {
         .andExpect(
             result ->
                 assertTrue(
-                    result.getResolvedException() instanceof HttpMessageNotReadableException))
-        .andExpect(
-            result ->
-                assertTrue(
-                    Objects.requireNonNull(result.getResolvedException())
-                        .getMessage()
-                        .contains("Required request body is missing")))
+                    result.getResolvedException() instanceof HttpMessageNotReadableException
+                        && Objects.requireNonNull(result.getResolvedException())
+                            .getMessage()
+                            .contains("Required request body is missing")))
         .andExpect(jsonPath("$.statusCode", is(400)));
   }
 
@@ -185,25 +180,18 @@ public class AuthenticationControllerTest {
         .andExpect(
             result ->
                 assertTrue(
-                    result.getResolvedException() instanceof MethodArgumentNotValidException))
-        .andExpect(
-            result ->
-                assertTrue(
-                    Objects.requireNonNull(result.getResolvedException())
-                        .getMessage()
-                        .contains("Username can not be empty.")))
-        .andExpect(
-            result ->
-                assertTrue(
-                    Objects.requireNonNull(result.getResolvedException())
-                        .getMessage()
-                        .contains("Email has invalid format.")))
-        .andExpect(
-            result ->
-                assertTrue(
-                    Objects.requireNonNull(result.getResolvedException())
-                        .getMessage()
-                        .contains("Password needs to be at least 8 characters long.")))
+                    result.getResolvedException() instanceof MethodArgumentNotValidException
+                        && Objects.requireNonNull(result.getResolvedException())
+                            .getMessage()
+                            .contains("Username can not be empty.")
+                        && result
+                            .getResolvedException()
+                            .getMessage()
+                            .contains("Email has invalid format.")
+                        && result
+                            .getResolvedException()
+                            .getMessage()
+                            .contains("Password needs to be at least 8 characters long.")))
         .andExpect(jsonPath("$.statusCode", is(400)));
   }
 
@@ -246,13 +234,12 @@ public class AuthenticationControllerTest {
         // Then
         .andExpect(status().isUnauthorized())
         .andExpect(
-            result -> assertTrue(result.getResolvedException() instanceof BadCredentialsException))
-        .andExpect(
             result ->
                 assertTrue(
-                    Objects.requireNonNull(result.getResolvedException())
-                        .getMessage()
-                        .contains("Username or password is not correct!")))
+                    result.getResolvedException() instanceof BadCredentialsException
+                        && Objects.requireNonNull(result.getResolvedException())
+                            .getMessage()
+                            .contains("Username or password is not correct!")))
         .andDo(print());
   }
 
@@ -274,19 +261,14 @@ public class AuthenticationControllerTest {
         .andExpect(
             result ->
                 assertTrue(
-                    result.getResolvedException() instanceof MethodArgumentNotValidException))
-        .andExpect(
-            result ->
-                assertTrue(
-                    Objects.requireNonNull(result.getResolvedException())
-                        .getMessage()
-                        .contains("Username can not be empty.")))
-        .andExpect(
-            result ->
-                assertTrue(
-                    Objects.requireNonNull(result.getResolvedException())
-                        .getMessage()
-                        .contains("Password can not be empty.")))
+                    result.getResolvedException() instanceof MethodArgumentNotValidException
+                        && Objects.requireNonNull(result.getResolvedException())
+                            .getMessage()
+                            .contains("Username can not be empty.")
+                        && result
+                            .getResolvedException()
+                            .getMessage()
+                            .contains("Password can not be empty.")))
         .andDo(print());
   }
 }

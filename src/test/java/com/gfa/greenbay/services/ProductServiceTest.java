@@ -43,7 +43,7 @@ public class ProductServiceTest {
             "Rolex Submariner",
             "Classic luxury diving watch",
             "https://example.com/rolex-submariner.jpg",
-            1000,
+            10,
             5000);
   }
 
