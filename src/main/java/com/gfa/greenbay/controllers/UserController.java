@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthenticationController {
+public class UserController {
   private final GreenbayUserService userService;
 
   @Autowired
-  public AuthenticationController(GreenbayUserService userService) {
+  public UserController(GreenbayUserService userService) {
     this.userService = userService;
   }
 
