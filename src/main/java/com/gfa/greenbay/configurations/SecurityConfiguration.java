@@ -1,9 +1,11 @@
 package com.gfa.greenbay.configurations;
 
+import com.gfa.greenbay.entities.enums.Role;
 import com.gfa.greenbay.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,8 +35,10 @@ public class SecurityConfiguration {
         .cors()
         .disable()
         .authorizeRequests()
-        .antMatchers("/api/auth/**")
+        .antMatchers("/api/auth/**", "/error")
         .permitAll()
+        .antMatchers(HttpMethod.DELETE)
+        .hasAuthority(String.valueOf(Role.ADMIN))
         .anyRequest()
         .authenticated()
         .and()
@@ -46,5 +50,4 @@ public class SecurityConfiguration {
 
     return http.build();
   }
-
 }

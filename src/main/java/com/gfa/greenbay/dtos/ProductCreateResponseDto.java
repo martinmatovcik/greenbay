@@ -3,12 +3,14 @@ package com.gfa.greenbay.dtos;
 import com.gfa.greenbay.entities.Product;
 import java.util.Objects;
 
-public class ProductResponseDto extends ProductDto {
+public class ProductCreateResponseDto extends ProductDto {
+
   private Long id;
 
-  public ProductResponseDto() {}
+  public ProductCreateResponseDto() {
+  }
 
-  public ProductResponseDto(
+  public ProductCreateResponseDto(
       Long id,
       String name,
       String description,
@@ -19,7 +21,7 @@ public class ProductResponseDto extends ProductDto {
     this.id = id;
   }
 
-  public ProductResponseDto(Product product) {
+  public ProductCreateResponseDto(Product product) {
     super(
         product.getName(),
         product.getDescription(),
@@ -39,10 +41,16 @@ public class ProductResponseDto extends ProductDto {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    if (!super.equals(o)) return false;
-    ProductResponseDto that = (ProductResponseDto) o;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    ProductCreateResponseDto that = (ProductCreateResponseDto) o;
     return Objects.equals(id, that.id);
   }
 }

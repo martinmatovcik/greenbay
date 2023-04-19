@@ -1,17 +1,12 @@
 package com.gfa.greenbay.entities;
 
 import com.gfa.greenbay.entities.enums.Role;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +28,16 @@ public class GreenbayUser implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  private Integer balance;
+  private Integer balance = 0;
+
+  @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+  private List<Product> sellableProducts = new ArrayList<>();
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  private List<Bid> bids = new ArrayList<>();
+
+  @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
+  private List<Product> boughtProducts = new ArrayList<>();
 
   public GreenbayUser() {
   }
@@ -43,7 +47,6 @@ public class GreenbayUser implements UserDetails {
     this.email = email;
     this.password = password;
     this.role = role;
-    this.balance = 0;
   }
 
   public Long getId() {
@@ -75,7 +78,15 @@ public class GreenbayUser implements UserDetails {
   }
 
   public void setRole(Role role) {
-    this.role = role;
+    this.role=role;
+  }
+
+  public void setUser() {
+    this.role = Role.USER;
+  }
+
+  public void setAdmin() {
+    this.role = Role.ADMIN;
   }
 
   @Override
@@ -119,21 +130,44 @@ public class GreenbayUser implements UserDetails {
     this.balance = balance;
   }
 
+  public List<Bid> getBids() {
+    return bids;
+  }
+
+  public void setBids(List<Bid> bids) {
+    this.bids = bids;
+  }
+
+  public List<Product> getSellableProducts() {
+    return sellableProducts;
+  }
+
+  public void setSellableProducts(List<Product> sellableProducts) {
+    this.sellableProducts = sellableProducts;
+  }
+
+  public List<Product> getBoughtProducts() {
+    return boughtProducts;
+  }
+
+  public void setBoughtProducts(List<Product> boughtProducts) {
+    this.boughtProducts = boughtProducts;
+  }
+
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
     GreenbayUser user = (GreenbayUser) o;
     return Objects.equals(id, user.id)
         && Objects.equals(username, user.username)
         && Objects.equals(email, user.email)
         && Objects.equals(password, user.password)
         && role == user.role
-        && Objects.equals(balance, user.balance);
+        && Objects.equals(balance, user.balance)
+        && Objects.equals(sellableProducts, user.sellableProducts)
+        && Objects.equals(bids, user.bids)
+        && Objects.equals(boughtProducts, user.boughtProducts);
   }
 
   @Override

@@ -4,7 +4,6 @@ import com.gfa.greenbay.dtos.ErrorDto;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GreenbayExceptionHandler {
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorDto> handleAuthValidationException(
       MethodArgumentNotValidException ex) {
@@ -24,7 +24,7 @@ public class GreenbayExceptionHandler {
     List<String> errorDetails = new ArrayList<>();
 
     for (FieldError error : errors) {
-        errorDetails.add(error.getDefaultMessage());
+      errorDetails.add(error.getDefaultMessage());
     }
 
     return new ResponseEntity<>(
@@ -35,16 +35,38 @@ public class GreenbayExceptionHandler {
   @ExceptionHandler(BadCredentialsException.class)
   public ResponseEntity<ErrorDto> handleBadCredentialsException(BadCredentialsException ex) {
     return new ResponseEntity<>(
-        new ErrorDto(403, Collections.singletonList(ex.getMessage())), HttpStatus.FORBIDDEN);
+        new ErrorDto(401, Collections.singletonList(ex.getMessage())),
+        HttpStatus.UNAUTHORIZED);
   }
 
-  @ExceptionHandler(DataIntegrityViolationException.class)
-  public ResponseEntity<ErrorDto> handleNotUniqueUsername(DataIntegrityViolationException ex) {
-    return new ResponseEntity<>(new ErrorDto(400, Collections.singletonList("Username is taken!")), HttpStatus.BAD_REQUEST);
+  @ExceptionHandler(NotUniqueException.class)
+  public ResponseEntity<ErrorDto> handleNotUnique(NotUniqueException ex) {
+    return new ResponseEntity<>(
+        new ErrorDto(409, Collections.singletonList(ex.getMessage())),
+        ex.getStatus());
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<ErrorDto> handleMissingRequestBody(HttpMessageNotReadableException ex) {
-    return new ResponseEntity<>(new ErrorDto(400, Collections.singletonList(ex.getMessage())), HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(
+        new ErrorDto(400, Collections.singletonList(ex.getMessage())), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ErrorDto> handleIllegalArgument(IllegalArgumentException ex) {
+    return new ResponseEntity<>(
+        new ErrorDto(400, Collections.singletonList(ex.getMessage())), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(IllegalOperationException.class)
+  public ResponseEntity<ErrorDto> handleIllegalOperation(IllegalOperationException ex) {
+    return new ResponseEntity<>(
+        new ErrorDto(400, Collections.singletonList(ex.getMessage())), ex.getStatus());
+  }
+
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<ErrorDto> handleNotFound(NotFoundException ex) {
+    return new ResponseEntity<>(
+        new ErrorDto(404, Collections.singletonList(ex.getMessage())), ex.getStatus());
   }
 }

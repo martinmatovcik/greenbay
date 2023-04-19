@@ -1,5 +1,7 @@
 package com.gfa.greenbay.dtos;
 
+import com.gfa.greenbay.entities.GreenbayUser;
+import com.gfa.greenbay.entities.Product;
 import java.util.Objects;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -13,7 +15,7 @@ public class ProductDto {
   private String description;
 
   @NotBlank(message = "Photo-url can not be empty.")
-  @org.hibernate.validator.constraints.URL(message = "Please provide valid URL")
+  @org.hibernate.validator.constraints.URL(message = "Please provide valid URL.")
   private String photoUrl;
 
   @NotNull(message = "Starting price can not be empty.")
@@ -21,7 +23,7 @@ public class ProductDto {
   private Integer startingPrice;
 
   @NotNull(message = "Purchase price can not be empty.")
-  @Min(value = 0, message = "Starting price needs to be positive integer.")
+  @Min(value = 0, message = "Purchase price needs to be positive integer.")
   private Integer purchasePrice;
 
   public ProductDto() {}
@@ -94,5 +96,18 @@ public class ProductDto {
   @Override
   public int hashCode() {
     return 0;
+  }
+
+  public Product toProductForUser(GreenbayUser user) {
+    Product product = new Product();
+
+    product.setName(this.name);
+    product.setDescription(this.description);
+    product.setPhotoUrl(this.photoUrl);
+    product.setStartingPrice(this.startingPrice);
+    product.setPurchasePrice(this.purchasePrice);
+    product.setSeller(user);
+
+    return product;
   }
 }
