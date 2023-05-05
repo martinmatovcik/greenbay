@@ -20,11 +20,16 @@ public class ProductServiceImpl implements ProductService {
   private final ProductRepository productRepository;
   private final BidRepository bidRepository;
   private static final Integer PAGE_SIZE = 20;
+  private final MessageService messageService;
 
   @Autowired
-  public ProductServiceImpl(ProductRepository productRepository, BidRepository bidRepository) {
+  public ProductServiceImpl(
+      ProductRepository productRepository,
+      BidRepository bidRepository,
+      MessageService messageService) {
     this.productRepository = productRepository;
     this.bidRepository = bidRepository;
+    this.messageService = messageService;
   }
 
   @Override
@@ -42,7 +47,8 @@ public class ProductServiceImpl implements ProductService {
   public Product loadProductForId(Long productId) {
     return productRepository
         .findById(productId)
-        .orElseThrow(() -> new NotFoundException("Product with this id was not found."));
+        .orElseThrow(
+            () -> new NotFoundException(messageService.getMessage("product_was_not_found_by_id")));
   }
 
   @Override
@@ -52,17 +58,19 @@ public class ProductServiceImpl implements ProductService {
     Integer bidValue = bid.getValue();
 
     if (product.isSold()) {
-      throw new IllegalOperationException("This item can't be bought! It has been sold already.");
+      throw new IllegalOperationException(
+          messageService.getMessage("product_has_been_sold_already"));
     }
 
     if (bidValue > user.getBalance()) {
-      throw new IllegalOperationException("There is not enough money in your account.");
+      throw new IllegalOperationException(messageService.getMessage("not_enough_user_balance"));
     }
 
     List<Bid> bids = product.getBids();
 
     if (bids.isEmpty() && bidValue < product.getStartingPrice()) {
-      throw new IllegalOperationException("Your bid has to be higher than the starting price!");
+      throw new IllegalOperationException(
+          messageService.getMessage("bid_is_lower_than_starting_price"));
     }
 
     Integer highestBid = 0;
@@ -72,8 +80,7 @@ public class ProductServiceImpl implements ProductService {
 
     if (bidValue <= highestBid) {
       throw new IllegalOperationException(
-          "Bid needs to be higher than the previous one. Highest bid for this item is: "
-              + highestBid);
+          messageService.getMessage("bid_is_lower_than_previous_bid") + highestBid);
     }
 
     bidRepository.save(bid);
@@ -85,20 +92,22 @@ public class ProductServiceImpl implements ProductService {
 
     return productRepository
         .findById(product.getId())
-        .orElseThrow(() -> new NotFoundException("Product was not found"));
+        .orElseThrow(() -> new NotFoundException(messageService.getMessage("product_was_not_found_by_id")));
   }
 
   @Override
   public void deleteProduct(Long productId) {
     productRepository
         .findById(productId)
-        .orElseThrow(() -> new NotFoundException("Product was not found."));
+        .orElseThrow(() -> new NotFoundException(messageService.getMessage("product_was_not_found_by_id")));
     productRepository.deleteById(productId);
   }
 
   @Override
   public void deleteBid(Long bidId) {
-    bidRepository.findById(bidId).orElseThrow(() -> new NotFoundException("Bid was not found."));
+    bidRepository
+        .findById(bidId)
+        .orElseThrow(() -> new NotFoundException(messageService.getMessage("bid_was_not_found")));
     bidRepository.deleteById(bidId);
   }
 }

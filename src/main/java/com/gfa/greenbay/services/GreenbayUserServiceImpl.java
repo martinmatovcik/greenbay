@@ -21,24 +21,28 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   private final UserDetailsService userDetailsService;
+  private final MessageService messageService;
 
   @Autowired
   public GreenbayUserServiceImpl(
       GreenbayUserRepository userRepository,
       PasswordEncoder passwordEncoder,
       JwtService jwtService,
-      AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
+      AuthenticationManager authenticationManager,
+      UserDetailsService userDetailsService,
+      MessageService messageService) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
     this.jwtService = jwtService;
     this.authenticationManager = authenticationManager;
     this.userDetailsService = userDetailsService;
+    this.messageService = messageService;
   }
 
   @Override
   public String register(GreenbayUser userToRegister) {
     if (isUsernamePresent(userToRegister.getUsername())) {
-      throw new NotUniqueException("Username is taken!");
+      throw new NotUniqueException(messageService.getMessage("username_is_taken"));
     }
 
     GreenbayUser registeredUser =
@@ -56,15 +60,14 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
   public String login(String username, String password) {
     try {
       authenticationManager.authenticate(
-          new UsernamePasswordAuthenticationToken(
-              username, password));
+          new UsernamePasswordAuthenticationToken(username, password));
     } catch (AuthenticationException e) {
-      throw new BadCredentialsException("Username or password is not correct!");
+      throw new BadCredentialsException(
+          messageService.getMessage("username_or_password_is_not_correct"));
     }
 
-    GreenbayUser user =
-        (GreenbayUser) userDetailsService.loadUserByUsername(username);
-    
+    GreenbayUser user = (GreenbayUser) userDetailsService.loadUserByUsername(username);
+
     return jwtService.generateToken(user);
   }
 
@@ -72,7 +75,7 @@ public class GreenbayUserServiceImpl implements GreenbayUserService {
   public void deleteUser(Long userId) {
     userRepository
         .findById(userId)
-        .orElseThrow(() -> new NotFoundException("User was not found."));
+        .orElseThrow(() -> new NotFoundException(messageService.getMessage("user_was_not_found")));
     userRepository.deleteById(userId);
   }
 

@@ -4,10 +4,10 @@ import java.util.Objects;
 import javax.validation.constraints.NotBlank;
 
 public class UserLoginRequestDto {
-  @NotBlank(message = "Username can not be empty.")
+  @NotBlank(message = "username_cannot_be_empty")
   private String username;
 
-  @NotBlank(message = "Password can not be empty.")
+  @NotBlank(message = "password_cannot_be_empty")
   private String password;
 
   public UserLoginRequestDto() {}

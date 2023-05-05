@@ -8,22 +8,22 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class ProductDto {
-  @NotBlank(message = "Name can not be empty.")
+  @NotBlank(message = "name_cannot_be_empty")
   private String name;
 
-  @NotBlank(message = "Description can not be empty.")
+  @NotBlank(message = "description_cannot_be_empty")
   private String description;
 
-  @NotBlank(message = "Photo-url can not be empty.")
-  @org.hibernate.validator.constraints.URL(message = "Please provide valid URL.")
+  @NotBlank(message = "url_cannot_be_empty")
+  @org.hibernate.validator.constraints.URL(message = "url_is_not_valid")
   private String photoUrl;
 
-  @NotNull(message = "Starting price can not be empty.")
-  @Min(value = 0, message = "Starting price needs to be positive integer.")
+  @NotNull(message = "starting_price_cannot_be_empty")
+  @Min(value = 0, message = "starting_price_must_be_higher_than_zero")
   private Integer startingPrice;
 
-  @NotNull(message = "Purchase price can not be empty.")
-  @Min(value = 0, message = "Purchase price needs to be positive integer.")
+  @NotNull(message = "purchase_price_cannot_be_empty")
+  @Min(value = 0, message = "purchase_price_must_be_higher_than_zero")
   private Integer purchasePrice;
 
   public ProductDto() {}

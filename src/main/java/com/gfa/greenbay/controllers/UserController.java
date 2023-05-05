@@ -6,6 +6,7 @@ import com.gfa.greenbay.dtos.UserLoginRequestDto;
 import com.gfa.greenbay.dtos.UserRegisterRequestDto;
 import com.gfa.greenbay.entities.GreenbayUser;
 import com.gfa.greenbay.services.GreenbayUserService;
+import com.gfa.greenbay.services.MessageService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class UserController {
   private final GreenbayUserService userService;
+  private final MessageService messageService;
 
   @Autowired
-  public UserController(GreenbayUserService userService) {
+  public UserController(GreenbayUserService userService, MessageService messageService) {
     this.userService = userService;
+    this.messageService = messageService;
   }
 
   @PostMapping("/register")
@@ -48,6 +51,6 @@ public class UserController {
   @DeleteMapping("/{id}")
   public ResponseEntity<MessageDto> deleteBid(@PathVariable("id") Long userId){
     userService.deleteUser(userId);
-    return new ResponseEntity<>(new MessageDto("Successfully deleted."), HttpStatus.OK);
+    return new ResponseEntity<>(new MessageDto(messageService.getMessage("successfully_deleted")), HttpStatus.OK);
   }
 }

@@ -9,6 +9,7 @@ import com.gfa.greenbay.dtos.ProductSpecificResponseDto;
 import com.gfa.greenbay.entities.Bid;
 import com.gfa.greenbay.entities.GreenbayUser;
 import com.gfa.greenbay.entities.Product;
+import com.gfa.greenbay.services.MessageService;
 import com.gfa.greenbay.services.ProductService;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +28,16 @@ public class ProductController {
 
   private final ProductService productService;
   private final UserDetailsService userDetailsService;
+  private final MessageService messageService;
 
   @Autowired
-  public ProductController(ProductService productService, UserDetailsService userDetailsService) {
+  public ProductController(
+      ProductService productService,
+      UserDetailsService userDetailsService,
+      MessageService messageService) {
     this.productService = productService;
     this.userDetailsService = userDetailsService;
+    this.messageService = messageService;
   }
 
   @PostMapping
@@ -88,13 +94,15 @@ public class ProductController {
   @DeleteMapping("/{id}")
   public ResponseEntity<MessageDto> deleteProduct(@PathVariable("id") Long productId){
     productService.deleteProduct(productId);
-    return new ResponseEntity<>(new MessageDto("Successfully deleted."), HttpStatus.OK);
+    return new ResponseEntity<>(
+        new MessageDto(messageService.getMessage("successfully_deleted")), HttpStatus.OK);
   }
 
   @DeleteMapping("/bid/{id}")
   public ResponseEntity<MessageDto> deleteBid(@PathVariable("id") Long bidId){
     productService.deleteBid(bidId);
-    return new ResponseEntity<>(new MessageDto("Successfully deleted."), HttpStatus.OK);
+    return new ResponseEntity<>(
+        new MessageDto(messageService.getMessage("successfully_deleted")), HttpStatus.OK);
   }
 
 }

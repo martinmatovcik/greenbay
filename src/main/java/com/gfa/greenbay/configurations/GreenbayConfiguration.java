@@ -2,6 +2,7 @@ package com.gfa.greenbay.configurations;
 
 import com.gfa.greenbay.exceptions.NotFoundException;
 import com.gfa.greenbay.repositories.GreenbayUserRepository;
+import com.gfa.greenbay.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,10 +18,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class GreenbayConfiguration {
 
   private final GreenbayUserRepository userRepository;
+  private final MessageService messageService;
 
   @Autowired
-  public GreenbayConfiguration(GreenbayUserRepository userRepository) {
+  public GreenbayConfiguration(
+      GreenbayUserRepository userRepository, MessageService messageService) {
     this.userRepository = userRepository;
+    this.messageService = messageService;
   }
 
   @Bean
@@ -28,7 +32,9 @@ public class GreenbayConfiguration {
     return username ->
         userRepository
             .findByUsername(username)
-            .orElseThrow(() -> new NotFoundException("User with this username was not found."));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(messageService.getMessage("user_not_found_by_username")));
   }
 
   @Bean
